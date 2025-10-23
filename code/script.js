@@ -56,6 +56,15 @@ async function loadLevels() {
             <p>${level.description}</p>
         `;
 
+        // --- 🛑🛑🛑 新增代码在这里 🛑🛑🛑 ---
+        // 添加点击事件
+        card.addEventListener('click', () => {
+            // 当卡片被点击时，跳转到新的 quiz.html 页面
+            // 我们把关卡的 'id' 通过 URL "参数" 传递过去
+            window.location.href = `quiz.html?level_id=${level.id}`;
+        });
+        // --- 🛑🛑🛑 新增代码结束 🛑🛑🛑 ---
+
         // 把新创建的卡片添加到容器中
         levelsContainer.appendChild(card);
     });
