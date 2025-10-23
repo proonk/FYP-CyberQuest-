@@ -21,7 +21,7 @@ async function loadLevels() {
     // 这就是调用服务器的 API
     // 确保你的表名大小写正确 (我这里用 'Levels')
     const { data, error } = await supabaseClient
-        .from('Levels')   
+        .from('levels')   
         .select('*');
 
     // 5. 检查是否出错
