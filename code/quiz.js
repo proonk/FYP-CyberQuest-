@@ -22,7 +22,7 @@ async function loadQuizData() {
         quizContainer.innerHTML = `<p style="color:red;">No Level ID found.</p>`;
         return;
     }
-    console.log(`正在加载 关卡 ID: ${levelId} 的数据`);
+    console.log(`Loading data for Level ID:${levelId} `);
 
     // (B) 从 Supabase 获取数据
     // 这条命令的意思是: "从 'modules' 表中获取所有数据，
@@ -37,17 +37,17 @@ async function loadQuizData() {
         .eq('level_id', levelId);
 
     if (error) {
-        console.error('获取模块和测验失败:', error);
-        quizContainer.innerHTML = `<p style="color:red;">加载题目失败: ${error.message}</p>`;
+        console.error('Error fetching modules/quizzes:', error);
+        quizContainer.innerHTML = `<p style="color:red;">Failed to load quizzes: ${error.message}</p>`;
         return;
     }
 
     if (modules.length === 0) {
-        quizContainer.innerHTML = '<p>:: 这个关卡还没有内容 ::</p>';
+        quizContainer.innerHTML = '<p>:: This level has no content yet ::</p>';
         return;
     }
 
-    console.log('成功获取到数据:', modules);
+    console.log('Successfully fetched data:', modules);
     quizContainer.innerHTML = ''; // 清空 "Loading..."
 
     // (C) 遍历数据并显示
@@ -79,10 +79,10 @@ async function loadQuizData() {
                     // 🛑 添加点击事件来检查答案 🛑
                     button.addEventListener('click', () => {
                         if (optionText === quiz.correct_answer) {
-                            alert('回答正确！');
+                            alert('Correct！');
                             button.style.backgroundColor = '#00FF00';
                         } else {
-                            alert('回答错误！');
+                            alert('Wrong answer！');
                             button.style.backgroundColor = 'red';
                         }
                     });

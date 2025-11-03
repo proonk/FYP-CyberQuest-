@@ -41,14 +41,14 @@ async function loadLevels() {
     }
 
     // 6. 成功获取数据
-    console.log('成功获取到数据:', data);
+    console.log('Successfully fetched data:', data);
 
     // 清空“加载中...”的消息
     levelsContainer.innerHTML = '';
 
     // 检查是否没有数据
     if (data.length === 0) {
-        levelsContainer.innerHTML = '<p>:: 还没有关卡 ::</p>';
+        levelsContainer.innerHTML = '<p>:: No levels found yet ::</p>';
         return;
     }
 
