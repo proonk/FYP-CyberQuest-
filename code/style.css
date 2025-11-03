@@ -155,3 +155,63 @@ body.pixel-art-body {
     background-color: #FFFF00;
     color: #000000;
 }
+
+/* 欢迎页面的容器 */
+.welcome-container {
+    background-color: #1a1a4a;
+    border: 4px solid #FFFFFF;
+    padding: 30px;
+    text-align: center;
+}
+
+.welcome-container p {
+    font-size: 0.8rem;
+    color: #DDDDDD;
+    line-height: 1.5;
+    margin-top: 20px;
+}
+
+/* 像素风格的输入框 */
+.pixel-input {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    color: #FFFFFF;
+    background-color: #000033;
+    border: 4px solid #FFFFFF;
+    padding: 10px;
+    text-align: center;
+    width: 80%;
+}
+
+.pixel-input::placeholder {
+    color: #555;
+}
+
+/* 传送门按钮 (公用样式) */
+.portal-button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1rem;
+    display: block;
+    width: 100%;
+    padding: 20px;
+    margin-top: 20px;
+    border: 4px solid #FFFFFF;
+    cursor: pointer;
+    box-shadow: 8px 8px 0px #000000;
+}
+
+.portal-button.child {
+    background-color: #00FF00; /* 亮绿色 */
+    color: #000000;
+}
+.portal-button.child:hover {
+    background-color: #55FF55;
+}
+
+.portal-button.teen {
+    background-color: #FF00FF; /* 亮洋红色 */
+    color: #FFFFFF;
+}
+.portal-button.teen:hover {
+    background-color: #FF55FF;
+}

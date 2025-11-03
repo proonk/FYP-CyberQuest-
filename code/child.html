@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to CyberQuest</title>
+    <title>CyberQuest - 像素世界</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,20 +18,14 @@
     </header>
 
     <main class="pixel-main-content">
+        <h2>:: 选择关卡 ::</h2>
         
-        <div class="welcome-container">
-            <h2>:: 欢迎, 探险家! ::</h2>
-            
-            <p>请输入你的名字:</p>
-            <input type="text" id="name-input" class="pixel-input" placeholder="你的名字...">
-            
-            <p>请选择你的旅程:</p>
-            <button id="btn-child" class="portal-button child">儿童区 (6-12 岁)</button>
-            <button id="btn-teen" class="portal-button teen">青少年区 (13+ 岁)</button>
+        <div id="levels-container">
+            <p class="loading-message">... L O A D I N G ...</p>
         </div>
-
     </main>
 
-    <script type="module" src="welcome.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="child.js"></script>
 </body>
-</html>
+</html> 

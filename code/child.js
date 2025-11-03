@@ -1,3 +1,12 @@
+// 🛑 新增：在顶部读取 localStorage
+const userName = localStorage.getItem('userName');
+const greeting = document.getElementById('level-greeting');
+
+if (userName && greeting) {
+    greeting.textContent = `:: 欢迎, ${userName}! 请选择关卡 ::`;
+}
+
+// ... (你所有其他的代码) ...
 // 注意：因为我们在 HTML 中使用了 <script type="module">, 
 // 并且从 CDN 加载了 supabase，所以这个 'supabase' 变量是全局可用的。
 const { createClient } = supabase;
