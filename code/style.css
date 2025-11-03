@@ -183,12 +183,14 @@ NEUTRAL WELCOME PAGE STYLES
     padding: 20px 0;
 }
 
-/* Keep the logo using the pixel font */
+
+/* Modern, neutral logo style */
 .logo-font {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 2.5rem;
-    color: #FF00FF; /* Bright magenta */
-    text-shadow: 4px 4px 0px #000000;
+    font-family: 'Roboto', sans-serif; /* 🛑 CHANGED */
+    font-weight: 700; /* Bolder font */
+    font-size: 3rem; /* Slightly larger */
+    color: #FFFFFF; /* Simple white */
+    text-shadow: none; /* 🛑 CHANGED: Remove pixel shadow */
     margin: 0;
 }
 
@@ -209,10 +211,10 @@ NEUTRAL WELCOME PAGE STYLES
 }
 
 .welcome-portal h2 {
-    /* Use pixel font for "Welcome" */
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.2rem;
-    color: #00FF00; /* Bright green */
+    font-family: 'Roboto', sans-serif; /* 🛑 CHANGED */
+    font-weight: 700;
+    font-size: 1.5rem; /* Larger modern font */
+    color: #FFFFFF; /* Simple white */
     margin-bottom: 20px;
 }
 
