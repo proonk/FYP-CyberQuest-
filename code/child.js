@@ -3,7 +3,7 @@ const userName = localStorage.getItem('userName');
 const greeting = document.getElementById('level-greeting');
 
 if (userName && greeting) {
-    greeting.textContent = `:: 欢迎, ${userName}! 请选择关卡 ::`;
+    greeting.textContent = `:: Welcome, ${userName}! Please select a level ::`;
 }
 
 // ... (你所有其他的代码) ...
