@@ -156,62 +156,124 @@ body.pixel-art-body {
     color: #000000;
 }
 
-/* 欢迎页面的容器 */
-.welcome-container {
-    background-color: #1a1a4a;
-    border: 4px solid #FFFFFF;
+/*
+========================================
+NEUTRAL WELCOME PAGE STYLES
+========================================
+*/
+
+/* 1. New Body Style */
+.welcome-body {
+    /* Use the new modern font */
+    font-family: 'Roboto', sans-serif;
+    background-color: #111827; /* Dark cool gray */
+    color: #FFFFFF;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 2. New Header Style */
+.welcome-header {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Keep the logo using the pixel font */
+.logo-font {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2.5rem;
+    color: #FF00FF; /* Bright magenta */
+    text-shadow: 4px 4px 0px #000000;
+    margin: 0;
+}
+
+/* 3. New Main Content Wrapper */
+.welcome-main {
+    max-width: 500px;
+    width: 100%;
+}
+
+/* 4. New Portal Box */
+.welcome-portal {
+    background-color: #1F2937; /* Darker gray */
+    border: 1px solid #4B5563;
+    border-radius: 12px; /* Rounded corners */
     padding: 30px;
     text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
-.welcome-container p {
-    font-size: 0.8rem;
-    color: #DDDDDD;
-    line-height: 1.5;
+.welcome-portal h2 {
+    /* Use pixel font for "Welcome" */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    color: #00FF00; /* Bright green */
+    margin-bottom: 20px;
+}
+
+.welcome-portal p {
+    font-size: 1rem;
+    color: #D1D5DB; /* Light gray */
     margin-top: 20px;
 }
 
-/* 像素风格的输入框 */
-.pixel-input {
-    font-family: 'Press Start 2P', cursive;
+/* 5. New Modern Input */
+.welcome-input {
+    font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     color: #FFFFFF;
-    background-color: #000033;
-    border: 4px solid #FFFFFF;
-    padding: 10px;
+    background-color: #374151; /* Lighter input bg */
+    border: 2px solid #4B5563;
+    border-radius: 8px; /* Rounded corners */
+    padding: 12px;
     text-align: center;
     width: 80%;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.pixel-input::placeholder {
-    color: #555;
+.welcome-input::placeholder {
+    color: #9CA3AF; /* Placeholder text */
 }
 
-/* 传送门按钮 (公用样式) */
-.portal-button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1rem;
+.welcome-input:focus {
+    outline: none;
+    border-color: #00FF00; /* Green border on focus */
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* 6. New Modern Buttons */
+.welcome-button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
     display: block;
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     margin-top: 20px;
-    border: 4px solid #FFFFFF;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
     cursor: pointer;
-    box-shadow: 8px 8px 0px #000000;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.portal-button.child {
-    background-color: #00FF00; /* 亮绿色 */
+.welcome-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Child Button Style */
+.welcome-button.child-btn {
+    background-color: #00FF00; /* Bright green */
     color: #000000;
 }
-.portal-button.child:hover {
-    background-color: #55FF55;
-}
 
-.portal-button.teen {
-    background-color: #FF00FF; /* 亮洋红色 */
+/* Teen Button Style */
+.welcome-button.teen-btn {
+    background-color: #FF00FF; /* Bright magenta */
     color: #FFFFFF;
-}
-.portal-button.teen:hover {
-    background-color: #FF55FF;
 }
