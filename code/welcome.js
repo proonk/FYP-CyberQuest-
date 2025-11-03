@@ -31,5 +31,5 @@ teenButton.addEventListener('click', () => {
 
     // 🛑 注意：我们现在还没有 teen.html，所以先给个提示
     // window.location.href = 'teen.html'; // (未来)
-    alert('青少年区还在建设中，敬请期待！');
+    alert('Wait Reagan Tongggggggggggggg');
 });

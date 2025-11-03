@@ -6,7 +6,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // 2. 初始化 Supabase 客户端
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-console.log('Quiz 页面 客户端已初始化');
+console.log('Quiz page client initialized');
 
 // 3. 获取 HTML 元素
 const quizContainer = document.getElementById('quiz-container');
@@ -19,7 +19,7 @@ async function loadQuizData() {
     const levelId = params.get('level_id');
 
     if (!levelId) {
-        quizContainer.innerHTML = `<p style="color:red;">错误：没有找到关卡 ID。</p>`;
+        quizContainer.innerHTML = `<p style="color:red;">No Level ID found.</p>`;
         return;
     }
     console.log(`正在加载 关卡 ID: ${levelId} 的数据`);

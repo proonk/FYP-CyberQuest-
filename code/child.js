@@ -25,7 +25,7 @@ const levelsContainer = document.getElementById('levels-container');
 
 // 4. 定义一个函数来从“服务器”获取并显示数据
 async function loadLevels() {
-    console.log('开始从服务器获取 "Levels" 表...');
+    console.log('Attempting to fetch "levels" table...');
 
     // 这就是调用服务器的 API
     // 确保你的表名大小写正确 (我这里用 'Levels')
@@ -35,8 +35,8 @@ async function loadLevels() {
 
     // 5. 检查是否出错
     if (error) {
-        console.error('获取关卡失败:', error);
-        levelsContainer.innerHTML = `<p style="color: red;">加载失败: ${error.message}</p>`;
+        console.error('Error fetching levels:', error);
+        levelsContainer.innerHTML = `<p style="color: red;">Failed to load: ${error.message}</p>`;
         return;
     }
 
