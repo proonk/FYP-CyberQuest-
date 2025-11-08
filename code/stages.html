@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberQuest - Level Select</title>
+    <title>CyberQuest - Stage Select</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,19 +14,19 @@
 <body class="pixel-art-body">
 
     <header class="pixel-header">
-        <a href="index.html" class="back-button">:: Portal ::</a>
+        <a href="child.html" class="back-button">:: Levels ::</a>
         <h1>CyberQuest</h1>
     </header>
 
     <main class="pixel-main-content">
-        <h2 id="level-greeting">:: Select a Level ::</h2>
+        <h2 id="stage-greeting">:: Select a Stage ::</h2>
         
-        <div id="levels-list-container">
+        <div id="stages-list-container">
             <p class="loading-message">... L O A D I N G ...</p>
         </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="child.js"></script>
+    <script type="module" src="stages.js"></script>
 </body>
 </html>

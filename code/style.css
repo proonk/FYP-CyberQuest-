@@ -1,35 +1,41 @@
-/* 1. 导入和设置全局像素字体 */
+/*
+========================================
+PIXEL ART STYLES (for child.html, stages.html, quiz.html)
+========================================
+*/
+
+/* 1. Global pixel font and body */
 body.pixel-art-body {
-    /* 关键：使用像素字体 */
+    /* Key: Use pixel font */
     font-family: 'Press Start 2P', cursive;
     
-    background-color: #000033; /* 复古的深蓝色背景 */
-    color: #FFFFFF; /* 白色文字 */
+    background-color: #000033; /* Retro deep blue background */
+    color: #FFFFFF; /* White text */
     margin: 0;
     padding: 20px;
 
-    /* 关键：防止图片/元素模糊，保持像素感 */
+    /* Key: Prevent blur, keep the pixel feel */
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
 }
 
-/* 2. 标题样式 */
+/* 2. Pixel Header */
 .pixel-header {
     text-align: center;
     padding: 20px;
     margin-bottom: 30px;
-    border-bottom: 6px solid #FFFF00; /* 亮黄色边框 */
+    border-bottom: 6px solid #FFFF00; /* Bright yellow border */
 }
 
 .pixel-header h1 {
-    font-size: 2.5rem; /* 大号标题 */
-    color: #FF00FF; /* 亮洋红色 */
-    text-shadow: 4px 4px 0px #000000; /* 黑色描边 */
+    font-size: 2.5rem; /* Large title */
+    color: #FF00FF; /* Bright magenta */
+    text-shadow: 4px 4px 0px #000000; /* Black stroke */
     margin: 0;
 }
 
-/* 3. 主内容区域 */
+/* 3. Pixel Main Content Area */
 .pixel-main-content {
     max-width: 900px;
     margin: 0 auto;
@@ -37,21 +43,46 @@ body.pixel-art-body {
 
 .pixel-main-content h2 {
     font-size: 1.2rem;
-    color: #00FF00; /* 亮绿色 */
+    color: #00FF00; /* Bright green */
     margin-bottom: 20px;
 }
 
-/* 4. “关卡”卡片样式 (最重要的部分) */
+/* 🛑 NEW: Vertical layout for Level Select (child.html) */
 #levels-container {
+    display: flex;
+    flex-direction: column; /* 1. 让卡片从上到下垂直排列 */
+    align-items: center;   /* 2. 让卡片在页面上水平居中 */
+    gap: 25px;             /* 3. 卡片之间的垂直间距 */
+}
+
+/* 🛑 NEW: Style for the cards INSIDE the new vertical list */
+#levels-container .level-card {
+    width: 80%;           /* 4. 让卡片变得很宽 (占 80% 宽度) */
+    min-width: 300px;     /* (保证在小屏幕上也不会太窄) */
+
+    /* 5. 增加卡片的高度和字体大小 */
+    padding: 30px;
+    min-height: 100px;
+}
+
+#levels-container .level-card h3 {
+    font-size: 1.5rem; /* 让 "第一关" 这样的标题更大 */
+}
+
+
+/* 🛑 ORIGINAL: Grid layout for Stage Select (stages.html) */
+#stages-list-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    /* 我们保留 stages.html 的 grid 布局 (用于 "Stage 1.1", "1.2" 并排) */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
+    justify-content: center;
 }
 
 .level-card {
-    background-color: #1a1a4a; /* 深一点的蓝色 */
+    background-color: #1a1a4a; /* Darker blue */
     
-    /* 关键：使用实线边框，不要圆角 */
+    /* Key: Use solid borders, no radius */
     border: 4px solid #FFFFFF;
     border-radius: 0; 
     
@@ -59,39 +90,50 @@ body.pixel-art-body {
     cursor: pointer;
     transition: all 0.1s ease-in-out;
 
-    /* 关键：块状阴影，模拟 8-bit 风格 */
+    /* Key: Blocky shadow for 8-bit style */
     box-shadow: 8px 8px 0px #000000;
 }
 
-/* 5. 悬停 (Hover) 效果 */
+/* 5. Hover Effect */
 .level-card:hover {
     background-color: #2a2a6a;
-    /* 鼠标悬停时，阴影改变颜色 */
+    /* Shadow changes color on hover */
     box-shadow: 8px 8px 0px #00FF00; 
     
-    /* 轻微移动，增加“按下”的感觉 */
+    /* Slight move for "press" feel */
     transform: translate(2px, 2px);
 }
 
 .level-card h3 {
     font-size: 1rem;
-    color: #FFFF00; /* 亮黄色 */
+    color: #FFFF00; /* Bright yellow */
     margin: 0 0 10px 0;
 }
 
 .level-card p {
-    font-size: 0.75rem; /* 像素字体的正文需要小一点 */
-    color: #DDDDDD; /* 灰白色 */
+    font-size: 0.75rem; /* Body text for pixel font needs to be small */
+    color: #DDDDDD; /* Off-white */
     line-height: 1.5;
 }
 
-/* 加载中的提示信息 */
+/* 🛑 NEW: Large card variant for child.html (Level Select) */
+.level-card.large {
+    padding: 30px;
+    min-height: 100px;
+}
+
+.level-card.large h3 {
+    font-size: 1.5rem; /* Bigger title */
+}
+
+
+/* Loading Message Style */
 .loading-message {
     font-size: 1rem;
     color: #FFFF00;
 }
 
-/* "返回" 按钮的样式 */
+/* "Back" Button Style */
 .back-button {
     font-family: 'Press Start 2P', cursive;
     text-decoration: none;
@@ -106,7 +148,13 @@ body.pixel-art-body {
     color: #FFFFFF;
 }
 
-/* 测验模块的样式 */
+/*
+========================================
+QUIZ PAGE STYLES (for quiz.html)
+========================================
+*/
+
+/* Module (Learning) Block */
 .module-block {
     background-color: #1a1a4a;
     border: 4px solid #FFFFFF;
@@ -114,15 +162,15 @@ body.pixel-art-body {
     margin-bottom: 20px;
 }
 
-.module-block h2 { /* 模块标题 */
+.module-block h2 { /* Module title */
     color: #00FF00;
 }
-.module-block p { /* 模块内容 */
+.module-block p { /* Module content */
     font-size: 0.75rem;
     line-height: 1.5;
 }
 
-/* 测验问题的样式 */
+/* Quiz Question Block */
 .quiz-question {
     background-color: #2a2a6a;
     border: 4px dashed #FF00FF;
@@ -136,7 +184,7 @@ body.pixel-art-body {
     margin: 0 0 15px 0;
 }
 
-/* 选项按钮的样式 */
+/* Quiz Option Button */
 .option-button {
     font-family: 'Press Start 2P', cursive;
     font-size: 0.75rem;
@@ -156,9 +204,10 @@ body.pixel-art-body {
     color: #000000;
 }
 
+
 /*
 ========================================
-NEUTRAL WELCOME PAGE STYLES
+NEUTRAL WELCOME PAGE STYLES (for index.html)
 ========================================
 */
 
