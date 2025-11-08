@@ -6,15 +6,11 @@ PIXEL ART STYLES (for child.html, stages.html, quiz.html)
 
 /* 1. Global pixel font and body */
 body.pixel-art-body {
-    /* Key: Use pixel font */
     font-family: 'Press Start 2P', cursive;
-    
-    background-color: #000033; /* Retro deep blue background */
-    color: #FFFFFF; /* White text */
+    background-color: #000033;
+    color: #FFFFFF;
     margin: 0;
     padding: 20px;
-
-    /* Key: Prevent blur, keep the pixel feel */
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
@@ -25,13 +21,13 @@ body.pixel-art-body {
     text-align: center;
     padding: 20px;
     margin-bottom: 30px;
-    border-bottom: 6px solid #FFFF00; /* Bright yellow border */
+    border-bottom: 6px solid #FFFF00;
 }
 
 .pixel-header h1 {
-    font-size: 2.5rem; /* Large title */
-    color: #FF00FF; /* Bright magenta */
-    text-shadow: 4px 4px 0px #000000; /* Black stroke */
+    font-size: 2.5rem;
+    color: #FF00FF;
+    text-shadow: 4px 4px 0px #000000;
     margin: 0;
 }
 
@@ -43,87 +39,72 @@ body.pixel-art-body {
 
 .pixel-main-content h2 {
     font-size: 1.2rem;
-    color: #00FF00; /* Bright green */
+    color: #00FF00;
     margin-bottom: 20px;
 }
 
-/* 🛑 NEW: Vertical layout for Level Select (child.html) */
-#levels-container {
+/* 🛑 CORRECTED: Vertical layout for Level Select (child.html) */
+#levels-list-container {
     display: flex;
-    flex-direction: column; /* 1. 让卡片从上到下垂直排列 */
-    align-items: center;   /* 2. 让卡片在页面上水平居中 */
-    gap: 25px;             /* 3. 卡片之间的垂直间距 */
+    flex-direction: column; /* 1. Vertical layout */
+    align-items: center;   /* 2. Center horizontally */
+    gap: 25px;             /* 3. Space between cards */
 }
 
-/* 🛑 NEW: Style for the cards INSIDE the new vertical list */
-#levels-container .level-card {
-    width: 80%;           /* 4. 让卡片变得很宽 (占 80% 宽度) */
-    min-width: 300px;     /* (保证在小屏幕上也不会太窄) */
-
-    /* 5. 增加卡片的高度和字体大小 */
-    padding: 30px;
-    min-height: 100px;
-}
-
-#levels-container .level-card h3 {
-    font-size: 1.5rem; /* 让 "第一关" 这样的标题更大 */
-}
-
-
-/* 🛑 ORIGINAL: Grid layout for Stage Select (stages.html) */
+/* 🛑 CORRECTED: Grid layout for Stage Select (stages.html) */
 #stages-list-container {
     display: grid;
-    /* 我们保留 stages.html 的 grid 布局 (用于 "Stage 1.1", "1.2" 并排) */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     justify-content: center;
 }
 
+/* Base style for all cards (used by stages.html) */
 .level-card {
-    background-color: #1a1a4a; /* Darker blue */
-    
-    /* Key: Use solid borders, no radius */
+    background-color: #1a1a4a;
     border: 4px solid #FFFFFF;
     border-radius: 0; 
-    
     padding: 20px;
     cursor: pointer;
     transition: all 0.1s ease-in-out;
-
-    /* Key: Blocky shadow for 8-bit style */
     box-shadow: 8px 8px 0px #000000;
 }
 
-/* 5. Hover Effect */
 .level-card:hover {
     background-color: #2a2a6a;
-    /* Shadow changes color on hover */
     box-shadow: 8px 8px 0px #00FF00; 
-    
-    /* Slight move for "press" feel */
     transform: translate(2px, 2px);
 }
 
 .level-card h3 {
     font-size: 1rem;
-    color: #FFFF00; /* Bright yellow */
+    color: #FFFF00;
     margin: 0 0 10px 0;
 }
 
+/* 🛑 CORRECTED: Base font size for card descriptions */
 .level-card p {
-    font-size: 0.75rem; /* Body text for pixel font needs to be small */
-    color: #DDDDDD; /* Off-white */
+    font-size: 0.8rem; /* Slightly larger base font */
+    color: #DDDDDD;
     line-height: 1.5;
 }
 
-/* 🛑 NEW: Large card variant for child.html (Level Select) */
+/* 🛑 CORRECTED: Large card variant for child.html (Level Select) */
 .level-card.large {
+    width: 80%;           /* Make cards wide */
+    min-width: 300px;     
     padding: 30px;
     min-height: 100px;
 }
 
 .level-card.large h3 {
     font-size: 1.5rem; /* Bigger title */
+}
+
+/* 🛑 CORRECTED: Larger font size for large card descriptions */
+.level-card.large p {
+    font-size: 1rem;  /* Much larger for the big card */
+    line-height: 1.6; /* A bit more spacing */
 }
 
 
@@ -162,11 +143,11 @@ QUIZ PAGE STYLES (for quiz.html)
     margin-bottom: 20px;
 }
 
-.module-block h2 { /* Module title */
+.module-block h2 {
     color: #00FF00;
 }
-.module-block p { /* Module content */
-    font-size: 0.75rem;
+.module-block p {
+    font-size: 0.75rem; /* This can stay small for the learning content */
     line-height: 1.5;
 }
 
@@ -213,9 +194,8 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
 
 /* 1. New Body Style */
 .welcome-body {
-    /* Use the new modern font */
     font-family: 'Roboto', sans-serif;
-    background-color: #111827; /* Dark cool gray */
+    background-color: #111827;
     color: #FFFFFF;
     margin: 0;
     padding: 20px;
@@ -235,11 +215,11 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
 
 /* Modern, neutral logo style */
 .logo-font {
-    font-family: 'Roboto', sans-serif; /* 🛑 CHANGED */
-    font-weight: 700; /* Bolder font */
-    font-size: 3rem; /* Slightly larger */
-    color: #FFFFFF; /* Simple white */
-    text-shadow: none; /* 🛑 CHANGED: Remove pixel shadow */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    color: #FFFFFF;
+    text-shadow: none;
     margin: 0;
 }
 
@@ -251,25 +231,25 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
 
 /* 4. New Portal Box */
 .welcome-portal {
-    background-color: #1F2937; /* Darker gray */
+    background-color: #1F2937;
     border: 1px solid #4B5563;
-    border-radius: 12px; /* Rounded corners */
+    border-radius: 12px;
     padding: 30px;
     text-align: center;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .welcome-portal h2 {
-    font-family: 'Roboto', sans-serif; /* 🛑 CHANGED */
+    font-family: 'Roboto', sans-serif;
     font-weight: 700;
-    font-size: 1.5rem; /* Larger modern font */
-    color: #FFFFFF; /* Simple white */
+    font-size: 1.5rem;
+    color: #FFFFFF;
     margin-bottom: 20px;
 }
 
 .welcome-portal p {
     font-size: 1rem;
-    color: #D1D5DB; /* Light gray */
+    color: #D1D5DB;
     margin-top: 20px;
 }
 
@@ -278,9 +258,9 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     color: #FFFFFF;
-    background-color: #374151; /* Lighter input bg */
+    background-color: #374151;
     border: 2px solid #4B5563;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 8px;
     padding: 12px;
     text-align: center;
     width: 80%;
@@ -288,12 +268,12 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
 }
 
 .welcome-input::placeholder {
-    color: #9CA3AF; /* Placeholder text */
+    color: #9CA3AF;
 }
 
 .welcome-input:focus {
     outline: none;
-    border-color: #00FF00; /* Green border on focus */
+    border-color: #00FF00;
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
@@ -307,7 +287,7 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     padding: 15px;
     margin-top: 20px;
     border: none;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -319,12 +299,12 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
 
 /* Child Button Style */
 .welcome-button.child-btn {
-    background-color: #00FF00; /* Bright green */
+    background-color: #00FF00;
     color: #000000;
 }
 
 /* Teen Button Style */
 .welcome-button.teen-btn {
-    background-color: #FF00FF; /* Bright magenta */
+    background-color: #FF00FF;
     color: #FFFFFF;
 }
