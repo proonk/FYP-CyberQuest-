@@ -16,10 +16,10 @@ const modalTitle = document.getElementById('feedback-title');
 const modalText = document.getElementById('feedback-text');
 const modalTimer = document.getElementById('feedback-timer');
 
-// 🛑 GLOBAL VARIABLES to manage game state
-let currentModule = null;     // Stores the module info
-let allQuestions = [];        // Stores the list of questions
-let currentQuestionIndex = 0; // Tracks which question we are on
+// GLOBAL VARIABLES
+let currentModule = null;
+let allQuestions = [];
+let currentQuestionIndex = 0;
 
 // 4. Load Data
 async function loadQuizData() {
@@ -47,25 +47,21 @@ async function loadQuizData() {
         return;
     }
 
-    // Save data to global variables
     currentModule = module;
     allQuestions = module.quizzes || [];
     currentQuestionIndex = 0;
 
-    // Start by showing the Intro (Learning Content)
     showIntro();
 }
 
-// 🛑 FUNCTION 1: Show the Learning Content (Intro)
+// FUNCTION 1: Intro
 function showIntro() {
-    quizContainer.innerHTML = ''; // Clear container
+    quizContainer.innerHTML = ''; 
 
-    // Create the "Learning Card"
     const introCard = document.createElement('div');
     introCard.className = 'module-block';
     
     let buttonHtml = '';
-    // Only show "Start" button if there are actual questions
     if (allQuestions.length > 0) {
         buttonHtml = `<button id="start-btn" class="welcome-button child-btn" style="margin-top:20px;">Start Challenge! ⚔️</button>`;
     } else {
@@ -80,34 +76,36 @@ function showIntro() {
 
     quizContainer.appendChild(introCard);
 
-    // Add click listener to Start button
     const startBtn = document.getElementById('start-btn');
     if (startBtn) {
         startBtn.addEventListener('click', () => {
-            showQuestion(); // Go to first question
+            showQuestion();
         });
     }
 }
 
-// 🛑 FUNCTION 2: Show the Current Question (One at a time)
+// 🛑 FUNCTION 2: Show Question (Updated Layout)
 function showQuestion() {
-    quizContainer.innerHTML = ''; // Clear previous content
+    quizContainer.innerHTML = ''; 
 
     const quiz = allQuestions[currentQuestionIndex];
     
-    // Create Question Card
+    // Main Card
     const questionCard = document.createElement('div');
     questionCard.className = 'quiz-question';
-    // Make it look nice and centered
     questionCard.style.marginTop = "0"; 
     questionCard.style.border = "6px solid #FFFFFF";
 
-    // Question Text
+    // 1. Question Text (At the TOP)
     const questionText = document.createElement('p');
     questionText.style.fontSize = "1.2rem";
-    questionText.style.marginBottom = "30px";
+    // We remove the big margin-bottom here because Flexbox will handle the spacing
     questionText.textContent = quiz.question;
     questionCard.appendChild(questionText);
+
+    // 🛑 NEW: Wrapper for Buttons (To push them to BOTTOM)
+    const answersWrapper = document.createElement('div');
+    answersWrapper.className = 'answers-wrapper'; // We will style this class in CSS
 
     // Options
     quiz.options.forEach(optionText => {
@@ -115,35 +113,33 @@ function showQuestion() {
         button.className = 'option-button';
         button.textContent = optionText;
 
-        // Click Logic
         button.addEventListener('click', () => {
             handleAnswer(optionText, quiz.correct_answer, quiz.explanation);
         });
         
-        questionCard.appendChild(button);
+        answersWrapper.appendChild(button);
     });
 
-    // Add a progress indicator (e.g., "Question 1 of 3")
+    // Progress Text (Inside the bottom wrapper)
     const progress = document.createElement('p');
     progress.style.color = '#FFFF00';
     progress.style.fontSize = '0.8rem';
     progress.style.marginTop = '20px';
+    progress.style.textAlign = 'center';
     progress.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
-    questionCard.appendChild(progress);
+    answersWrapper.appendChild(progress);
 
+    // Add wrapper to card
+    questionCard.appendChild(answersWrapper);
     quizContainer.appendChild(questionCard);
 }
 
-// 🛑 FUNCTION 3: Handle Feedback & Transition
+// FUNCTION 3: Feedback
 function handleAnswer(selected, correct, explanation) {
-    // 1. Show overlay
     modalOverlay.style.display = 'flex';
-    
-    // 2. Reset timer
     modalTimer.style.width = '100%';
-    void modalTimer.offsetWidth; // Force reflow
+    void modalTimer.offsetWidth; 
 
-    // 3. Set Content based on answer
     if (selected === correct) {
         modalBox.className = 'feedback-modal success';
         modalTitle.textContent = '🎉 Correct! 🎉';
@@ -154,29 +150,21 @@ function handleAnswer(selected, correct, explanation) {
         modalText.textContent = explanation || `The correct answer was: ${correct}`;
     }
 
-    // 4. Start timer animation
     modalTimer.style.transition = 'width 3s linear';
     modalTimer.style.width = '0%';
 
-    // 5. WAIT 3 SECONDS... THEN GO TO NEXT
     setTimeout(() => {
-        modalOverlay.style.display = 'none'; // Hide modal
-        
-        // 🛑 Move to next question index
+        modalOverlay.style.display = 'none'; 
         currentQuestionIndex++;
-
-        // 🛑 Check if there are more questions
         if (currentQuestionIndex < allQuestions.length) {
-            showQuestion(); // Show next one
+            showQuestion(); 
         } else {
-            showFinishScreen(); // No more questions
+            showFinishScreen(); 
         }
-
     }, 3000);
 }
 
-// 🛑 FUNCTION 4: Show Finish Screen
-
+// FUNCTION 4: Finish Screen
 function showFinishScreen() {
     quizContainer.innerHTML = '';
 
@@ -188,12 +176,12 @@ function showFinishScreen() {
     finishCard.innerHTML = `
         <h2 style="font-size: 2rem; color: #00FF00;">🏆 MISSION COMPLETE! 🏆</h2>
         <p style="font-size: 1rem; margin: 20px 0;">You have defeated this challenge!</p>
-        <button id="back-btn" class="welcome-button child-btn">Back to Levels</button> `;
+        <button id="back-btn" class="welcome-button child-btn">Back to Levels</button>
+    `;
 
     quizContainer.appendChild(finishCard);
 
     document.getElementById('back-btn').addEventListener('click', () => {
-        // 🛑 CHANGED: Go back to the main LEVEL list (child.html)
         window.location.href = 'child.html';
     });
 }

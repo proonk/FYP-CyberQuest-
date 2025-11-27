@@ -4,7 +4,6 @@ PIXEL ART STYLES (for child.html, stages.html, quiz.html)
 ========================================
 */
 
-/* 1. Global pixel font and body */
 body.pixel-art-body {
     font-family: 'Press Start 2P', cursive;
     background-color: #000033;
@@ -16,7 +15,6 @@ body.pixel-art-body {
     image-rendering: crisp-edges;
 }
 
-/* 2. Pixel Header */
 .pixel-header {
     text-align: center;
     padding: 20px;
@@ -31,7 +29,6 @@ body.pixel-art-body {
     margin: 0;
 }
 
-/* 3. Pixel Main Content Area */
 .pixel-main-content {
     max-width: 900px;
     margin: 0 auto;
@@ -46,20 +43,35 @@ body.pixel-art-body {
 /* 🛑 CORRECTED: Vertical layout for Level Select (child.html) */
 #levels-list-container {
     display: flex;
-    flex-direction: column; /* 1. Vertical layout */
-    align-items: center;   /* 2. Center horizontally */
-    gap: 25px;             /* 3. Space between cards */
+    flex-direction: column; 
+    align-items: center;   
+    gap: 25px;             
+}
+
+#levels-list-container .level-card {
+    width: 80%;           
+    min-width: 300px;     
+    padding: 30px;
+    min-height: 100px;
+}
+
+#levels-list-container .level-card h3 {
+    font-size: 1.5rem; 
+}
+
+#levels-list-container .level-card p {
+    font-size: 1rem;  
+    line-height: 1.6; 
 }
 
 /* 🛑 CORRECTED: Grid layout for Stage Select (stages.html) */
 #stages-list-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, 300px); 
     gap: 20px;
     justify-content: center;
 }
 
-/* Base style for all cards (used by stages.html) */
 .level-card {
     background-color: #1a1a4a;
     border: 4px solid #FFFFFF;
@@ -82,39 +94,33 @@ body.pixel-art-body {
     margin: 0 0 10px 0;
 }
 
-/* 🛑 CORRECTED: Base font size for card descriptions */
 .level-card p {
-    font-size: 0.8rem; /* Slightly larger base font */
+    font-size: 0.8rem; 
     color: #DDDDDD;
     line-height: 1.5;
 }
 
-/* 🛑 CORRECTED: Large card variant for child.html (Level Select) */
 .level-card.large {
-    width: 80%;           /* Make cards wide */
+    width: 80%;           
     min-width: 300px;     
     padding: 30px;
     min-height: 100px;
 }
 
 .level-card.large h3 {
-    font-size: 1.5rem; /* Bigger title */
+    font-size: 1.5rem; 
 }
 
-/* 🛑 CORRECTED: Larger font size for large card descriptions */
 .level-card.large p {
-    font-size: 1rem;  /* Much larger for the big card */
-    line-height: 1.6; /* A bit more spacing */
+    font-size: 1rem;  
+    line-height: 1.6; 
 }
 
-
-/* Loading Message Style */
 .loading-message {
     font-size: 1rem;
     color: #FFFF00;
 }
 
-/* "Back" Button Style */
 .back-button {
     font-family: 'Press Start 2P', cursive;
     text-decoration: none;
@@ -135,7 +141,6 @@ QUIZ PAGE STYLES (for quiz.html)
 ========================================
 */
 
-/* Module (Learning) Block */
 .module-block {
     background-color: #1a1a4a;
     border: 4px solid #FFFFFF;
@@ -147,52 +152,127 @@ QUIZ PAGE STYLES (for quiz.html)
     color: #00FF00;
 }
 .module-block p {
-    font-size: 0.75rem; /* This can stay small for the learning content */
+    font-size: 0.75rem; 
     line-height: 1.5;
 }
 
-/* Quiz Question Block */
+/* 🛑 NEW: Layout for the Quiz Card (The Box) */
 .quiz-question {
     background-color: #2a2a6a;
     border: 4px dashed #FF00FF;
-    padding: 15px;
+    padding: 40px;
     margin-top: 15px;
+    
+    /* Flexbox magic to push buttons to bottom */
+    display: flex;
+    flex-direction: column;
+    
+    /* Force the box to be tall (like a game screen) */
+    min-height: 500px; 
 }
 
 .quiz-question p {
-    font-size: 0.8rem;
+    font-size: 1.3rem; 
     color: #FFFFFF;
-    margin: 0 0 15px 0;
+    line-height: 1.6;
+    font-weight: bold;
+    text-align: center;
+    /* We don't need huge margin-bottom anymore because Flexbox handles spacing */
 }
 
-/* Quiz Option Button */
+/* 🛑 NEW: Wrapper for the buttons */
+.answers-wrapper {
+    margin-top: auto; /* This PUSHES everything inside it to the bottom */
+    width: 100%;
+}
+
 .option-button {
     font-family: 'Press Start 2P', cursive;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     display: block;
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 15px; 
+    margin-bottom: 20px; 
     background-color: #4a90e2;
     color: #FFFFFF;
     border: 4px solid #FFFFFF;
     cursor: pointer;
     box-shadow: 4px 4px 0px #000000;
+    transition: transform 0.1s;
 }
 
 .option-button:hover {
     background-color: #FFFF00;
     color: #000000;
+    transform: translateY(-2px);
 }
-
 
 /*
 ========================================
-NEUTRAL WELCOME PAGE STYLES (for index.html)
+FEEDBACK MODAL & WELCOME STYLES (Unchanged)
 ========================================
 */
 
-/* 1. New Body Style */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.feedback-modal {
+    background-color: #1a1a4a;
+    border: 6px solid #FFFFFF;
+    padding: 30px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    color: #FFFFFF;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.feedback-modal.success {
+    border-color: #00FF00;
+}
+.feedback-modal.success h2 {
+    color: #00FF00;
+}
+
+.feedback-modal.error {
+    border-color: #FF0000;
+}
+.feedback-modal.error h2 {
+    color: #FF0000;
+}
+
+.feedback-message {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 20px 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.timer-bar {
+    height: 5px;
+    background-color: #FFFFFF;
+    width: 100%;
+    margin-top: 15px;
+    transition: width 3s linear;
+}
+
 .welcome-body {
     font-family: 'Roboto', sans-serif;
     background-color: #111827;
@@ -205,15 +285,12 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     min-height: 100vh;
 }
 
-/* 2. New Header Style */
 .welcome-header {
     width: 100%;
     text-align: center;
     padding: 20px 0;
 }
 
-
-/* Modern, neutral logo style */
 .logo-font {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
@@ -223,13 +300,11 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     margin: 0;
 }
 
-/* 3. New Main Content Wrapper */
 .welcome-main {
     max-width: 500px;
     width: 100%;
 }
 
-/* 4. New Portal Box */
 .welcome-portal {
     background-color: #1F2937;
     border: 1px solid #4B5563;
@@ -253,7 +328,6 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     margin-top: 20px;
 }
 
-/* 5. New Modern Input */
 .welcome-input {
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
@@ -277,7 +351,6 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
-/* 6. New Modern Buttons */
 .welcome-button {
     font-family: 'Roboto', sans-serif;
     font-size: 1.1rem;
@@ -297,87 +370,12 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
-/* Child Button Style */
 .welcome-button.child-btn {
     background-color: #00FF00;
     color: #000000;
 }
 
-/* Teen Button Style */
 .welcome-button.teen-btn {
     background-color: #FF00FF;
     color: #FFFFFF;
-}
-
-/*
-========================================
-FEEDBACK MODAL STYLES (Pop-up)
-========================================
-*/
-
-/* The dark background behind the modal */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent */
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* On top of everything */
-}
-
-/* The actual pop-up box */
-.feedback-modal {
-    background-color: #1a1a4a;
-    border: 6px solid #FFFFFF;
-    padding: 30px;
-    width: 80%;
-    max-width: 500px;
-    text-align: center;
-    font-family: 'Press Start 2P', cursive;
-    color: #FFFFFF;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    animation: popIn 0.3s ease-out;
-}
-
-/* Animation for the box appearing */
-@keyframes popIn {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Success Style (Green) */
-.feedback-modal.success {
-    border-color: #00FF00;
-}
-.feedback-modal.success h2 {
-    color: #00FF00;
-}
-
-/* Error Style (Red) */
-.feedback-modal.error {
-    border-color: #FF0000;
-}
-.feedback-modal.error h2 {
-    color: #FF0000;
-}
-
-/* Explanation Text */
-.feedback-message {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin: 20px 0;
-    font-family: 'Roboto', sans-serif; /* Use readable font for long text */
-}
-
-/* Timer Bar */
-.timer-bar {
-    height: 5px;
-    background-color: #FFFFFF;
-    width: 100%;
-    margin-top: 15px;
-    transition: width 3s linear; /* Animates the bar shrinking */
 }
