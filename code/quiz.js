@@ -1,22 +1,30 @@
 const { createClient } = supabase;
 
-// 1. Your Supabase credentials
+// 1. Credentials
 const SUPABASE_URL = 'https://brqisvltkrafajojozbr.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWlzdmx0a3JhZmFqb2pvemJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMjg1ODAsImV4cCI6MjA3NjcwNDU4MH0.BsGBK-ECEoC1SKRtHD0RZVL2m9iAOO8HKg7SLTnA8iM';
 
-// 2. Initialize Supabase client
+// 2. Init Client
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 console.log('Quiz page client initialized');
 
-// 3. Get HTML element
+// 3. Get Elements
 const quizContainer = document.getElementById('quiz-container');
+const modalOverlay = document.getElementById('feedback-overlay');
+const modalBox = document.getElementById('feedback-box');
+const modalTitle = document.getElementById('feedback-title');
+const modalText = document.getElementById('feedback-text');
+const modalTimer = document.getElementById('feedback-timer');
 
-// 4. 🛑 CHANGED: This function now loads a SINGLE module
+// 🛑 GLOBAL VARIABLES to manage game state
+let currentModule = null;     // Stores the module info
+let allQuestions = [];        // Stores the list of questions
+let currentQuestionIndex = 0; // Tracks which question we are on
+
+// 4. Load Data
 async function loadQuizData() {
-    
-    // (A) 🛑 CHANGED: Read module_id from the URL
     const params = new URLSearchParams(window.location.search);
-    const moduleId = params.get('module_id'); // We now get 'module_id'
+    const moduleId = params.get('module_id');
 
     if (!moduleId) {
         quizContainer.innerHTML = `<p style="color:red;">Error: No Module ID found.</p>`;
@@ -24,76 +32,170 @@ async function loadQuizData() {
     }
     console.log(`Loading data for Module ID: ${moduleId}`);
 
-    // (B) 🛑 CHANGED: Fetch ONE module and its related quizzes
     const { data: module, error } = await supabaseClient
         .from('modules')
         .select(`
             *,
-            quizzes ( * )
+            quizzes ( *, explanation )
         `)
-        .eq('id', moduleId) // Fetch by the module's own ID
-        .single(); // We only expect one record
+        .eq('id', moduleId)
+        .single();
 
     if (error) {
-        console.error('Error fetching module/quizzes:', error);
-        quizContainer.innerHTML = `<p style="color:red;">Failed to load content: ${error.message}</p>`;
+        console.error('Error fetching module:', error);
+        quizContainer.innerHTML = `<p style="color:red;">Failed to load: ${error.message}</p>`;
         return;
     }
 
-    if (!module) {
-        quizContainer.innerHTML = '<p>:: This content could not be found ::</p>';
-        return;
-    }
+    // Save data to global variables
+    currentModule = module;
+    allQuestions = module.quizzes || [];
+    currentQuestionIndex = 0;
 
-    console.log('Successfully fetched data:', module);
-    quizContainer.innerHTML = ''; // Clear "Loading..."
-
-    // (C) 🛑 CHANGED: We no longer need to loop modules.forEach
-    // We just display the single module we fetched.
-    
-    // 1. Create the module HTML
-    const moduleBlock = document.createElement('div');
-    moduleBlock.className = 'module-block';
-    moduleBlock.innerHTML = `
-        <h2>${module.title}</h2>
-        <p>${module.content}</p>
-    `;
-
-    // 2. Check if this module has quizzes
-    if (module.quizzes && module.quizzes.length > 0) {
-        
-        module.quizzes.forEach(quiz => {
-            const quizQuestion = document.createElement('div');
-            quizQuestion.className = 'quiz-question';
-            
-            quizQuestion.innerHTML = `<p>${quiz.question}</p>`;
-            
-            quiz.options.forEach(optionText => {
-                const button = document.createElement('button');
-                button.className = 'option-button';
-                button.textContent = optionText;
-
-                // Check answer logic (same as before)
-                button.addEventListener('click', () => {
-                    if (optionText === quiz.correct_answer) {
-                        alert('Correct!');
-                        button.style.backgroundColor = '#00FF00';
-                        // You could add logic here to "unlock" the next stage
-                    } else {
-                        alert('Wrong answer! Try again.');
-                        button.style.backgroundColor = 'red';
-                    }
-                });
-                
-                quizQuestion.appendChild(button);
-            });
-
-            moduleBlock.appendChild(quizQuestion);
-        });
-    }
-    
-    quizContainer.appendChild(moduleBlock);
+    // Start by showing the Intro (Learning Content)
+    showIntro();
 }
 
-// 5. Run the function when the page loads
+// 🛑 FUNCTION 1: Show the Learning Content (Intro)
+function showIntro() {
+    quizContainer.innerHTML = ''; // Clear container
+
+    // Create the "Learning Card"
+    const introCard = document.createElement('div');
+    introCard.className = 'module-block';
+    
+    let buttonHtml = '';
+    // Only show "Start" button if there are actual questions
+    if (allQuestions.length > 0) {
+        buttonHtml = `<button id="start-btn" class="welcome-button child-btn" style="margin-top:20px;">Start Challenge! ⚔️</button>`;
+    } else {
+        buttonHtml = `<button onclick="window.location.href='stages.html?level_id=${currentModule.level_id}'" class="welcome-button child-btn" style="margin-top:20px;">Done! Go Back</button>`;
+    }
+
+    introCard.innerHTML = `
+        <h2>${currentModule.title}</h2>
+        <p style="font-size: 1rem; line-height: 1.8;">${currentModule.content}</p>
+        ${buttonHtml}
+    `;
+
+    quizContainer.appendChild(introCard);
+
+    // Add click listener to Start button
+    const startBtn = document.getElementById('start-btn');
+    if (startBtn) {
+        startBtn.addEventListener('click', () => {
+            showQuestion(); // Go to first question
+        });
+    }
+}
+
+// 🛑 FUNCTION 2: Show the Current Question (One at a time)
+function showQuestion() {
+    quizContainer.innerHTML = ''; // Clear previous content
+
+    const quiz = allQuestions[currentQuestionIndex];
+    
+    // Create Question Card
+    const questionCard = document.createElement('div');
+    questionCard.className = 'quiz-question';
+    // Make it look nice and centered
+    questionCard.style.marginTop = "0"; 
+    questionCard.style.border = "6px solid #FFFFFF";
+
+    // Question Text
+    const questionText = document.createElement('p');
+    questionText.style.fontSize = "1.2rem";
+    questionText.style.marginBottom = "30px";
+    questionText.textContent = quiz.question;
+    questionCard.appendChild(questionText);
+
+    // Options
+    quiz.options.forEach(optionText => {
+        const button = document.createElement('button');
+        button.className = 'option-button';
+        button.textContent = optionText;
+
+        // Click Logic
+        button.addEventListener('click', () => {
+            handleAnswer(optionText, quiz.correct_answer, quiz.explanation);
+        });
+        
+        questionCard.appendChild(button);
+    });
+
+    // Add a progress indicator (e.g., "Question 1 of 3")
+    const progress = document.createElement('p');
+    progress.style.color = '#FFFF00';
+    progress.style.fontSize = '0.8rem';
+    progress.style.marginTop = '20px';
+    progress.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+    questionCard.appendChild(progress);
+
+    quizContainer.appendChild(questionCard);
+}
+
+// 🛑 FUNCTION 3: Handle Feedback & Transition
+function handleAnswer(selected, correct, explanation) {
+    // 1. Show overlay
+    modalOverlay.style.display = 'flex';
+    
+    // 2. Reset timer
+    modalTimer.style.width = '100%';
+    void modalTimer.offsetWidth; // Force reflow
+
+    // 3. Set Content based on answer
+    if (selected === correct) {
+        modalBox.className = 'feedback-modal success';
+        modalTitle.textContent = '🎉 Correct! 🎉';
+        modalText.textContent = explanation || "Great job! You got it right.";
+    } else {
+        modalBox.className = 'feedback-modal error';
+        modalTitle.textContent = '😢 Oops! 😢';
+        modalText.textContent = explanation || `The correct answer was: ${correct}`;
+    }
+
+    // 4. Start timer animation
+    modalTimer.style.transition = 'width 3s linear';
+    modalTimer.style.width = '0%';
+
+    // 5. WAIT 3 SECONDS... THEN GO TO NEXT
+    setTimeout(() => {
+        modalOverlay.style.display = 'none'; // Hide modal
+        
+        // 🛑 Move to next question index
+        currentQuestionIndex++;
+
+        // 🛑 Check if there are more questions
+        if (currentQuestionIndex < allQuestions.length) {
+            showQuestion(); // Show next one
+        } else {
+            showFinishScreen(); // No more questions
+        }
+
+    }, 3000);
+}
+
+// 🛑 FUNCTION 4: Show Finish Screen
+
+function showFinishScreen() {
+    quizContainer.innerHTML = '';
+
+    const finishCard = document.createElement('div');
+    finishCard.className = 'module-block';
+    finishCard.style.textAlign = 'center';
+    finishCard.style.borderColor = '#00FF00';
+
+    finishCard.innerHTML = `
+        <h2 style="font-size: 2rem; color: #00FF00;">🏆 MISSION COMPLETE! 🏆</h2>
+        <p style="font-size: 1rem; margin: 20px 0;">You have defeated this challenge!</p>
+        <button id="back-btn" class="welcome-button child-btn">Back to Levels</button> `;
+
+    quizContainer.appendChild(finishCard);
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+        // 🛑 CHANGED: Go back to the main LEVEL list (child.html)
+        window.location.href = 'child.html';
+    });
+}
+
 document.addEventListener('DOMContentLoaded', loadQuizData);

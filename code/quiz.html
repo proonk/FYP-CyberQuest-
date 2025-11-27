@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -23,6 +24,14 @@
             <p class="loading-message">... L O A D I N G ...</p>
         </div>
     </main>
+
+    <div id="feedback-overlay" class="modal-overlay">
+        <div id="feedback-box" class="feedback-modal">
+            <h2 id="feedback-title"></h2>
+            <p id="feedback-text" class="feedback-message"></p>
+            <div id="feedback-timer" class="timer-bar"></div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     

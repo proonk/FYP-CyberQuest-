@@ -308,3 +308,76 @@ NEUTRAL WELCOME PAGE STYLES (for index.html)
     background-color: #FF00FF;
     color: #FFFFFF;
 }
+
+/*
+========================================
+FEEDBACK MODAL STYLES (Pop-up)
+========================================
+*/
+
+/* The dark background behind the modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* On top of everything */
+}
+
+/* The actual pop-up box */
+.feedback-modal {
+    background-color: #1a1a4a;
+    border: 6px solid #FFFFFF;
+    padding: 30px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    color: #FFFFFF;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.3s ease-out;
+}
+
+/* Animation for the box appearing */
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Success Style (Green) */
+.feedback-modal.success {
+    border-color: #00FF00;
+}
+.feedback-modal.success h2 {
+    color: #00FF00;
+}
+
+/* Error Style (Red) */
+.feedback-modal.error {
+    border-color: #FF0000;
+}
+.feedback-modal.error h2 {
+    color: #FF0000;
+}
+
+/* Explanation Text */
+.feedback-message {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 20px 0;
+    font-family: 'Roboto', sans-serif; /* Use readable font for long text */
+}
+
+/* Timer Bar */
+.timer-bar {
+    height: 5px;
+    background-color: #FFFFFF;
+    width: 100%;
+    margin-top: 15px;
+    transition: width 3s linear; /* Animates the bar shrinking */
+}
