@@ -9,18 +9,54 @@ body.pixel-art-body {
     image-rendering: crisp-edges;
 }
 
+/* 修改 Header 布局 */
 .pixel-header {
-    text-align: center;
+    display: flex;
+    justify-content: space-between; /* 左右分开 */
+    align-items: center;
     padding: 20px;
     margin-bottom: 30px;
     border-bottom: 6px solid #FFFF00;
+    position: relative; /* 为了绝对定位的备用 */
 }
 
+/* 修改 Header 布局 */
+.pixel-header {
+    display: flex;
+    justify-content: space-between; /* 左右分开 */
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-bottom: 6px solid #FFFF00;
+    position: relative; /* 为了绝对定位的备用 */
+}
+
+/* 标题居中修正 */
 .pixel-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #FF00FF;
     text-shadow: 4px 4px 0px #000000;
     margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 0; /* 放在最底层 */
+}
+
+/* 标题居中修正 */
+.pixel-header h1 {
+    font-size: 2rem;
+    color: #FF00FF;
+    text-shadow: 4px 4px 0px #000000;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    z-index: 0; /* 放在最底层 */
 }
 
 .pixel-main-content {

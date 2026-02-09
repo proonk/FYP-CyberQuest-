@@ -2,11 +2,11 @@ const { createClient } = supabase;
 const SUPABASE_URL = 'https://brqisvltkrafajojozbr.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWlzdmx0a3JhZmFqb2pvemJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMjg1ODAsImV4cCI6MjA3NjcwNDU4MH0.BsGBK-ECEoC1SKRtHD0RZVL2m9iAOO8HKg7SLTnA8iM';
 
-// 2. Init Client
+// Initialize Supabase Client
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 console.log('Quiz page client initialized');
 
-// 3. Get Elements
+// DOM Elements
 const quizContainer = document.getElementById('quiz-container');
 const modalOverlay = document.getElementById('feedback-overlay');
 const modalBox = document.getElementById('feedback-box');
@@ -14,12 +14,14 @@ const modalTitle = document.getElementById('feedback-title');
 const modalText = document.getElementById('feedback-text');
 const modalTimer = document.getElementById('feedback-timer');
 
-// GLOBAL VARIABLES
+// Global Variables
 let currentModule = null;
 let allQuestions = [];
 let currentQuestionIndex = 0;
+let currentScore = 0; // New: Track Score
+const SCORE_PER_QUESTION = 100; // New: Points per correct answer
 
-// 4. Load Data
+// 1. Load Data
 async function loadQuizData() {
     const params = new URLSearchParams(window.location.search);
     const moduleId = params.get('module_id');
@@ -28,14 +30,11 @@ async function loadQuizData() {
         quizContainer.innerHTML = `<p style="color:red;">Error: No Module ID found.</p>`;
         return;
     }
-    console.log(`Loading data for Module ID: ${moduleId}`);
-
+    
+    // Fetch module and questions
     const { data: module, error } = await supabaseClient
         .from('modules')
-        .select(`
-            *,
-            quizzes ( *, explanation )
-        `)
+        .select(`*, quizzes ( *, explanation )`)
         .eq('id', moduleId)
         .single();
 
@@ -48,11 +47,12 @@ async function loadQuizData() {
     currentModule = module;
     allQuestions = module.quizzes || [];
     currentQuestionIndex = 0;
+    currentScore = 0; // Reset score
 
     showIntro();
 }
 
-// FUNCTION 1: Intro
+// 2. Show Intro Screen
 function showIntro() {
     quizContainer.innerHTML = ''; 
 
@@ -61,49 +61,49 @@ function showIntro() {
     
     let buttonHtml = '';
     if (allQuestions.length > 0) {
-        buttonHtml = `<button id="start-btn" class="welcome-button child-btn" style="margin-top:20px;">Start Challenge! ⚔️</button>`;
+        buttonHtml = `<button id="start-btn" class="welcome-button child-btn">Start Challenge! ⚔️</button>`;
     } else {
-        buttonHtml = `<button onclick="window.location.href='stages.html?level_id=${currentModule.level_id}'" class="welcome-button child-btn" style="margin-top:20px;">Done! Go Back</button>`;
+        // Fallback if no questions
+        const backUrl = `stages.html?level_id=${currentModule.level_id || ''}`;
+        buttonHtml = `<button onclick="window.location.href='${backUrl}'" class="welcome-button child-btn">Go Back</button>`;
     }
 
     introCard.innerHTML = `
         <h2>${currentModule.title}</h2>
-        <p style="font-size: 1rem; line-height: 1.8;">${currentModule.content}</p>
-        ${buttonHtml}
+        <p style="font-size: 0.8rem; line-height: 1.8;">${currentModule.content}</p>
+        <div style="margin-top: 20px;">${buttonHtml}</div>
     `;
 
     quizContainer.appendChild(introCard);
 
     const startBtn = document.getElementById('start-btn');
     if (startBtn) {
-        startBtn.addEventListener('click', () => {
+        startBtn.onclick = () => {
             showQuestion();
-        });
+        };
     }
 }
 
-// 🛑 FUNCTION 2: Show Question (Updated Layout)
+// 3. Show Question
 function showQuestion() {
     quizContainer.innerHTML = ''; 
-
     const quiz = allQuestions[currentQuestionIndex];
     
-    // Main Card
+    // Main Card Wrapper
     const questionCard = document.createElement('div');
     questionCard.className = 'quiz-question';
     questionCard.style.marginTop = "0"; 
     questionCard.style.border = "6px solid #FFFFFF";
 
-    // 1. Question Text (At the TOP)
+    // Question Text
     const questionText = document.createElement('p');
     questionText.style.fontSize = "1.2rem";
-    // We remove the big margin-bottom here because Flexbox will handle the spacing
     questionText.textContent = quiz.question;
     questionCard.appendChild(questionText);
 
-    // 🛑 NEW: Wrapper for Buttons (To push them to BOTTOM)
+    // Answer Buttons Wrapper
     const answersWrapper = document.createElement('div');
-    answersWrapper.className = 'answers-wrapper'; // We will style this class in CSS
+    answersWrapper.className = 'answers-wrapper';
 
     // Options
     quiz.options.forEach(optionText => {
@@ -118,39 +118,48 @@ function showQuestion() {
         answersWrapper.appendChild(button);
     });
 
-    // Progress Text (Inside the bottom wrapper)
-    const progress = document.createElement('p');
-    progress.style.color = '#FFFF00';
-    progress.style.fontSize = '0.8rem';
-    progress.style.marginTop = '20px';
-    progress.style.textAlign = 'center';
-    progress.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
-    answersWrapper.appendChild(progress);
-
-    // Add wrapper to card
+    // Score & Progress Display
+    const statusText = document.createElement('div');
+    statusText.style.display = 'flex';
+    statusText.style.justifyContent = 'space-between';
+    statusText.style.marginTop = '20px';
+    statusText.style.color = '#FFFF00';
+    statusText.style.fontSize = '0.8rem';
+    
+    statusText.innerHTML = `
+        <span>Score: ${currentScore}</span>
+        <span>Q: ${currentQuestionIndex + 1} / ${allQuestions.length}</span>
+    `;
+    
+    answersWrapper.appendChild(statusText);
     questionCard.appendChild(answersWrapper);
     quizContainer.appendChild(questionCard);
 }
 
-// FUNCTION 3: Feedback
+// 4. Handle Answer & Feedback
 function handleAnswer(selected, correct, explanation) {
     modalOverlay.style.display = 'flex';
     modalTimer.style.width = '100%';
+    // Force reflow for animation reset
     void modalTimer.offsetWidth; 
 
     if (selected === correct) {
+        // Correct: Add Score
+        currentScore += SCORE_PER_QUESTION;
+        
         modalBox.className = 'feedback-modal success';
         modalTitle.textContent = '🎉 Correct! 🎉';
-        modalText.textContent = explanation || "Great job! You got it right.";
+        modalText.innerHTML = `${explanation || "Great job!"} <br><br> <span style="color:#FFFF00">+${SCORE_PER_QUESTION} Points!</span>`;
     } else {
         modalBox.className = 'feedback-modal error';
         modalTitle.textContent = '😢 Oops! 😢';
         modalText.textContent = explanation || `The correct answer was: ${correct}`;
     }
 
-    modalTimer.style.transition = 'width 3s linear';
+    modalTimer.style.transition = 'width 2s linear';
     modalTimer.style.width = '0%';
 
+    // Auto-advance after 2 seconds
     setTimeout(() => {
         modalOverlay.style.display = 'none'; 
         currentQuestionIndex++;
@@ -159,29 +168,69 @@ function handleAnswer(selected, correct, explanation) {
         } else {
             showFinishScreen(); 
         }
-    }, 3000);
+    }, 2000);
 }
 
-// FUNCTION 4: Finish Screen
+// 5. Finish Screen (With Score & Leaderboard Submission)
 function showFinishScreen() {
     quizContainer.innerHTML = '';
+    
+    // New: Save unlocking progress to LocalStorage
+    // We unlock the NEXT module index. Simple logic: just mark current module as done.
+    const unlockedModules = JSON.parse(localStorage.getItem('unlocked_modules') || '[]');
+    if (!unlockedModules.includes(currentModule.id)) {
+        unlockedModules.push(currentModule.id);
+        localStorage.setItem('unlocked_modules', JSON.stringify(unlockedModules));
+    }
 
-    const finishCard = document.createElement('div');
-    finishCard.className = 'module-block';
-    finishCard.style.textAlign = 'center';
-    finishCard.style.borderColor = '#00FF00';
+    // Reuse modal style logic but inside the main container or overlay
+    // Here we use the Modal Overlay for the final score card
+    modalBox.className = 'feedback-modal success';
+    modalBox.style.textAlign = 'center';
 
-    finishCard.innerHTML = `
-        <h2 style="font-size: 2rem; color: #00FF00;">🏆 MISSION COMPLETE! 🏆</h2>
-        <p style="font-size: 1rem; margin: 20px 0;">You have defeated this challenge!</p>
-        <button id="back-btn" class="welcome-button child-btn">Back to Levels</button>
+    modalBox.innerHTML = `
+        <h2 style="font-size: 2rem; color: #00FF00; margin-bottom: 20px;">🏆 MISSION COMPLETE! 🏆</h2>
+        <p style="font-size: 1.2rem; color: #FFFFFF;">Final Score: <span style="color:#FFFF00; font-size:1.5rem;">${currentScore}</span></p>
+        
+        <div style="margin-top: 30px; text-align: left;">
+            <label style="color: #fff; display:block; margin-bottom:10px;">Enter Name for Leaderboard:</label>
+            <input type="text" id="player-name" placeholder="Your Name" style="width:100%; padding:10px; border-radius:5px; border:none; margin-bottom:10px;">
+        </div>
+
+        <button id="submit-score-btn" class="welcome-button child-btn" style="margin-top: 10px;">Submit Score & Exit</button>
+        <button id="skip-btn" style="background:transparent; border:none; color:#aaa; margin-top:10px; cursor:pointer; text-decoration:underline;">Skip & Exit</button>
     `;
 
-    quizContainer.appendChild(finishCard);
+    if (modalTimer) modalTimer.style.display = 'none';
+    modalOverlay.style.display = 'flex';
 
-    document.getElementById('back-btn').addEventListener('click', () => {
-        window.location.href = 'child.html';
-    });
+    // Bind Buttons
+    document.getElementById('submit-score-btn').onclick = async () => {
+        const playerName = document.getElementById('player-name').value;
+        if (!playerName) {
+            alert("Please enter a name!");
+            return;
+        }
+        
+        // Save to Supabase
+        const { error } = await supabaseClient
+            .from('leaderboard')
+            .insert([{ username: playerName, score: currentScore }]);
+
+        if (error) {
+            console.error('Error saving score:', error);
+            alert('Failed to save score. Please try again.');
+        } else {
+            alert('Score Saved! View Leaderboard?');
+            // Redirect to a leaderboard page or back to stages
+            // For now, let's go back to stages
+            window.location.href = `stages.html?level_id=${currentModule.level_id || ''}`;
+        }
+    };
+
+    document.getElementById('skip-btn').onclick = () => {
+        window.location.href = `stages.html?level_id=${currentModule.level_id || ''}`;
+    };
 }
 
 document.addEventListener('DOMContentLoaded', loadQuizData);

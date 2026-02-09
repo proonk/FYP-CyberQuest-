@@ -1,19 +1,12 @@
 const { createClient } = supabase;
 
-// 1. Your Supabase credentials (same as other files)
 const SUPABASE_URL = 'https://brqisvltkrafajojozbr.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWlzdmx0a3JhZmFqb2pvemJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMjg1ODAsImV4cCI6MjA3NjcwNDU4MH0.BsGBK-ECEoC1SKRtHD0RZVL2m9iAOO8HKg7SLTnA8iM';
 
-// 2. Initialize Supabase client
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-console.log('Stages page client initialized');
-
-// 3. Get HTML element
 const stagesContainer = document.getElementById('stages-list-container');
 
-// 4. Define function to load stages (which are 'modules')
 async function loadStages() {
-    // (A) Read the level_id from the URL
     const params = new URLSearchParams(window.location.search);
     const levelId = params.get('level_id');
 
@@ -22,47 +15,66 @@ async function loadStages() {
         return;
     }
     
-    // (B) Fetch all 'modules' that belong to this 'level_id'
-    console.log(`Fetching modules for Level ID: ${levelId}`);
+    // Fetch modules
     const { data: modules, error } = await supabaseClient
         .from('modules')
         .select('*')
         .eq('level_id', levelId)
-        .order('id', { ascending: true });
+        .order('id', { ascending: true }); // Assume ID order is the game order
 
     if (error) {
         stagesContainer.innerHTML = `<p style="color:red;">Failed to load stages: ${error.message}</p>`;
         return;
     }
 
-    if (modules.length === 0) {
-        stagesContainer.innerHTML = '<p>:: No stages found for this level ::</p>';
-        return;
-    }
+    stagesContainer.innerHTML = ''; 
 
-    console.log('Successfully fetched modules:', modules);
-    stagesContainer.innerHTML = ''; // Clear loading message
+    // Get unlocked modules from LocalStorage
+    // Format: [1, 2, 5] (List of IDs that are COMPLETED)
+    const completedModules = JSON.parse(localStorage.getItem('unlocked_modules') || '[]');
 
-    // (C) Loop through the modules and display them as "Stage" buttons
-    modules.forEach(module => {
+    modules.forEach((module, index) => {
         const stageCard = document.createElement('button');
-        stageCard.className = 'level-card'; // We can re-use the .level-card style
+        stageCard.className = 'level-card';
         
-        stageCard.innerHTML = `
-            <h3>${module.title}</h3>
-            <p>${module.description || 'Click to start'}</p> 
-        `;
+        // Logic:
+        // 1. First stage (index 0) is ALWAYS unlocked.
+        // 2. Other stages are unlocked ONLY IF the previous stage ID is in 'completedModules'.
+        let isLocked = false;
+        if (index > 0) {
+            const previousModuleId = modules[index - 1].id;
+            if (!completedModules.includes(previousModuleId)) {
+                isLocked = true;
+            }
+        }
 
-        // (D) 🛑 CRITICAL: Add click event
-        stageCard.addEventListener('click', () => {
-            // This now links to the quiz.html page,
-            // but passes the MODULE_ID
-            window.location.href = `quiz.html?module_id=${module.id}`;
-        });
+        if (isLocked) {
+            // Locked Style
+            stageCard.style.opacity = '0.5';
+            stageCard.style.cursor = 'not-allowed';
+            stageCard.innerHTML = `
+                <h3>🔒 Locked</h3>
+                <p>Complete previous stage</p> 
+            `;
+            // No click event listener
+        } else {
+            // Unlocked Style
+            // Check if this specific stage is already done
+            const isDone = completedModules.includes(module.id);
+            const statusIcon = isDone ? '✅' : '🔥';
+            
+            stageCard.innerHTML = `
+                <h3>${module.title} ${statusIcon}</h3>
+                <p>${module.description || 'Click to start'}</p> 
+            `;
+            
+            stageCard.addEventListener('click', () => {
+                window.location.href = `quiz.html?module_id=${module.id}`;
+            });
+        }
 
         stagesContainer.appendChild(stageCard);
     });
 }
 
-// 5. Run the function when the page loads
 document.addEventListener('DOMContentLoaded', loadStages);
