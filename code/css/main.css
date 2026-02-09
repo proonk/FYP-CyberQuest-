@@ -1,3 +1,8 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Base Styles */
 body.pixel-art-body {
     font-family: 'Press Start 2P', cursive;
     background-color: #000033;
@@ -5,33 +10,21 @@ body.pixel-art-body {
     margin: 0;
     padding: 20px;
     image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
 }
 
-/* 修改 Header 布局 */
+/* Header Layout - Fixed for clickable buttons */
 .pixel-header {
     display: flex;
-    justify-content: space-between; /* 左右分开 */
+    justify-content: space-between; /* Space out left, center, right */
     align-items: center;
     padding: 20px;
     margin-bottom: 30px;
     border-bottom: 6px solid #FFFF00;
-    position: relative; /* 为了绝对定位的备用 */
+    position: relative;
+    height: 60px; /* Fixed height to prevent collapse */
 }
 
-/* 修改 Header 布局 */
-.pixel-header {
-    display: flex;
-    justify-content: space-between; /* 左右分开 */
-    align-items: center;
-    padding: 20px;
-    margin-bottom: 30px;
-    border-bottom: 6px solid #FFFF00;
-    position: relative; /* 为了绝对定位的备用 */
-}
-
-/* 标题居中修正 */
+/* Title Styling - Centered absolutely but behind buttons */
 .pixel-header h1 {
     font-size: 2rem;
     color: #FF00FF;
@@ -40,23 +33,60 @@ body.pixel-art-body {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
+    width: auto;
     text-align: center;
-    z-index: 0; /* 放在最底层 */
+    z-index: 1; /* Low priority */
+    pointer-events: none; /* Make clicks pass through title */
 }
 
-/* 标题居中修正 */
-.pixel-header h1 {
-    font-size: 2rem;
-    color: #FF00FF;
-    text-shadow: 4px 4px 0px #000000;
-    margin: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    text-align: center;
-    z-index: 0; /* 放在最底层 */
+/* Back Button Styling - High Priority Click */
+.back-button {
+    font-family: 'Press Start 2P', cursive;
+    text-decoration: none;
+    color: #FFFF00;
+    font-size: 0.8rem;
+    z-index: 100; /* Very high priority to ensure clickability */
+    position: relative;
+    cursor: pointer;
+    background: #000033; /* Background to cover lines if needed */
+    padding: 5px;
+}
+
+.back-button:hover {
+    color: #FFFFFF;
+    text-shadow: 2px 2px 0px #FF00FF;
+}
+
+/* Right Side Header (Points & Rank) */
+.header-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    z-index: 100; /* High priority */
+    position: relative;
+}
+
+.score-display {
+    color: #00FF00;
+    font-size: 0.8rem;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.leaderboard-btn {
+    text-decoration: none;
+    background-color: #FFD700;
+    color: #000;
+    padding: 10px;
+    border: 2px solid #FFF;
+    font-size: 0.7rem;
+    box-shadow: 4px 4px 0px #000;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.leaderboard-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
 }
 
 .pixel-main-content {
@@ -64,26 +94,8 @@ body.pixel-art-body {
     margin: 0 auto;
 }
 
-.pixel-main-content h2 {
-    font-size: 1.2rem;
-    color: #00FF00;
-    margin-bottom: 20px;
-}
-
-.welcome-button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.8rem;
-    display: block;
-    width: 100%;
-    padding: 15px;
-    margin-top: 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 4px 4px 0px #000000;
-}
-
-.child-btn {
-    background-color: #00FF00;
-    color: #000000;
+.loading-message {
+    font-size: 1rem;
+    color: #FFFF00;
+    text-align: center;
 }

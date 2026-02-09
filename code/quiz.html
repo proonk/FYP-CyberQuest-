@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberQuest - Level Challenge</title>
+    <title>CyberQuest - Challenge</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,13 +15,13 @@
 </head>
 <body class="pixel-art-body">
 
-   <header class="pixel-header">
-        <a href="child.html" class="back-button">:: Back ::</a>
+    <header class="pixel-header">
+        <a href="#" id="quiz-back-btn" class="back-button">:: Back ::</a>
         
         <h1>CyberQuest</h1>
 
         <div class="header-right">
-            <div id="score-board" class="score-display">SCORE: 0</div>
+            <div id="points-display" class="score-display">POINTS: 0</div>
             <a href="leaderboard.html" class="leaderboard-btn">🏆 RANK</a>
         </div>
     </header>
@@ -41,7 +41,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script type="module" src="/js/quiz.js"></script>
+    <script type="module" src="js/quiz.js"></script>
 </body>
 </html>
