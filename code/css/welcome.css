@@ -1,0 +1,166 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.feedback-modal {
+    background-color: #1a1a4a;
+    border: 6px solid #FFFFFF;
+    padding: 30px;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+    color: #FFFFFF;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.feedback-modal.success {
+    border-color: #00FF00;
+}
+.feedback-modal.success h2 {
+    color: #00FF00;
+}
+
+.feedback-modal.error {
+    border-color: #FF0000;
+}
+.feedback-modal.error h2 {
+    color: #FF0000;
+}
+
+.feedback-message {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 20px 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.timer-bar {
+    height: 5px;
+    background-color: #FFFFFF;
+    width: 100%;
+    margin-top: 15px;
+    transition: width 3s linear;
+}
+
+.welcome-body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #111827;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.welcome-header {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.logo-font {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    color: #FFFFFF;
+    text-shadow: none;
+    margin: 0;
+}
+
+.welcome-main {
+    max-width: 500px;
+    width: 100%;
+}
+
+.welcome-portal {
+    background-color: #1F2937;
+    border: 1px solid #4B5563;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-portal h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+}
+
+.welcome-portal p {
+    font-size: 1rem;
+    color: #D1D5DB;
+    margin-top: 20px;
+}
+
+.welcome-input {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    color: #FFFFFF;
+    background-color: #374151;
+    border: 2px solid #4B5563;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    width: 80%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.welcome-input::placeholder {
+    color: #9CA3AF;
+}
+
+.welcome-input:focus {
+    outline: none;
+    border-color: #00FF00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.welcome-button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.welcome-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.welcome-button.child-btn {
+    background-color: #00FF00;
+    color: #000000;
+}
+
+.welcome-button.teen-btn {
+    background-color: #FF00FF;
+    color: #FFFFFF;
+}

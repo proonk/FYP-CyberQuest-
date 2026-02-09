@@ -1,0 +1,65 @@
+/* 🛑 NEW: Layout for the Quiz Card (The Box) */
+.quiz-question {
+    background-color: #2a2a6a;
+    border: 4px dashed #FF00FF;
+    padding: 40px;
+    margin-top: 15px;
+    
+    /* Flexbox magic to push buttons to bottom */
+    display: flex;
+    flex-direction: column;
+    
+    /* Force the box to be tall (like a game screen) */
+    min-height: 500px; 
+}
+
+.quiz-question p {
+    font-size: 1.3rem; 
+    color: #FFFFFF;
+    line-height: 1.6;
+    font-weight: bold;
+    text-align: center;
+    /* We don't need huge margin-bottom anymore because Flexbox handles spacing */
+}
+
+/* 🛑 NEW: Wrapper for the buttons */
+.answers-wrapper {
+    margin-top: auto; /* This PUSHES everything inside it to the bottom */
+    width: 100%;
+}
+
+.option-button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    display: block;
+    width: 100%;
+    padding: 15px; 
+    margin-bottom: 20px; 
+    background-color: #4a90e2;
+    color: #FFFFFF;
+    border: 4px solid #FFFFFF;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #000000;
+    transition: transform 0.1s;
+}
+
+.option-button:hover {
+    background-color: #FFFF00;
+    color: #000000;
+    transform: translateY(-2px);
+}
+
+.module-block {
+    background-color: #1a1a4a;
+    border: 4px solid #FFFFFF;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.module-block h2 {
+    color: #00FF00;
+}
+.module-block p {
+    font-size: 0.75rem; 
+    line-height: 1.5;
+}
