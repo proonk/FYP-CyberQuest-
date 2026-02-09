@@ -63,3 +63,88 @@
     font-size: 0.75rem; 
     line-height: 1.5;
 }
+
+/* =========================================
+   Feedback
+   ========================================= */
+
+/* 1. 确保遮罩层是居中、背景变暗的 */
+.modal-overlay {
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* 背景变暗 */
+    display: none; /* 默认隐藏，JS 会改成 flex */
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
+    z-index: 2000; /* 保证在最上层 */
+    backdrop-filter: blur(5px); /* 可选：给背景加一点模糊，更高级 */
+}
+
+/* 2. 弹窗的基础样式 */
+.feedback-modal {
+    background: #1a1a4a; /* 深蓝色背景 */
+    border: 6px solid #FFFFFF; /* 默认白色边框 */
+    padding: 40px;
+    text-align: center;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    position: relative;
+}
+
+/* 3. 答对时的样式 (Success) - 绿色 */
+.feedback-modal.success {
+    border-color: #00FF00; /* 绿色边框 */
+    box-shadow: 0 0 30px #00FF00; /* 绿色发光效果 */
+}
+
+.feedback-modal.success h2 {
+    color: #00FF00; /* 标题变绿 */
+    text-shadow: 2px 2px 0px #000;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* 4. 答错时的样式 (Error) - 红色 */
+.feedback-modal.error {
+    border-color: #FF0000; /* 红色边框 */
+    box-shadow: 0 0 30px #FF0000; /* 红色发光效果 */
+}
+
+.feedback-modal.error h2 {
+    color: #FF0000; /* 标题变红 */
+    text-shadow: 2px 2px 0px #000;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* 5. 反馈文字样式 */
+.feedback-message {
+    color: #FFFFFF;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 6. 计时条样式 */
+.timer-bar {
+    height: 6px;
+    background: #FFFFFF;
+    width: 100%;
+    border-radius: 3px;
+    margin-top: 15px;
+}
+
+/* 答对时计时条也是绿色 */
+.feedback-modal.success .timer-bar {
+    background: #00FF00;
+}
+
+/* 答错时计时条也是红色 */
+.feedback-modal.error .timer-bar {
+    background: #FF0000;
+}
