@@ -15,15 +15,12 @@ const modalBox = document.getElementById('feedback-box');
 const modalTitle = document.getElementById('feedback-title');
 const modalText = document.getElementById('feedback-text');
 const modalTimer = document.getElementById('feedback-timer');
-const pointsDisplay = document.getElementById('points-display');
 const backBtnElement = document.getElementById('quiz-back-btn');
 
 // Global Variables
 let currentModule = null;
 let allQuestions = [];
 let currentQuestionIndex = 0;
-let currentPoints = 0;
-const POINTS_PER_QUESTION = 100;
 
 // 4. Load Quiz Data
 async function loadQuizData() {
@@ -50,19 +47,16 @@ async function loadQuizData() {
     currentModule = module;
     allQuestions = module.quizzes || [];
     currentQuestionIndex = 0;
-    currentPoints = 0;
 
-    // FIX: Ensure Back Button links to the Stage List of the CURRENT Level
+    // Update Back Button Link
     if (backBtnElement) {
         backBtnElement.href = `stages.html?level_id=${currentModule.level_id}`;
     }
 
-    if (pointsDisplay) pointsDisplay.textContent = `POINTS: ${currentPoints}`;
-
     showIntro();
 }
 
-// 5. Intro Screen (FIXED FOR TUTORIALS)
+// 5. Intro Screen 
 function showIntro() {
     quizContainer.innerHTML = ''; 
     const introCard = document.createElement('div');
@@ -72,18 +66,24 @@ function showIntro() {
     
     // Check if it's a Quiz or a Tutorial
     if (allQuestions.length > 0) {
-        // It is a Quiz -> Show Start Button
-        buttonHtml = `<button id="start-btn" class="welcome-button child-btn">Start Challenge! ⚔️</button>`;
+        buttonHtml = `
+            <button id="start-btn" class="welcome-button child-btn" 
+                style="font-size: 1.5rem; padding: 20px; text-transform: uppercase; letter-spacing: 2px; box-shadow: 6px 6px 0px #000;">
+                ⚔️ START CHALLENGE ⚔️
+            </button>`;
     } else {
-        // It is a Tutorial (No Questions) -> Show "Complete" Button
-        // This was the problem! Now we use a proper button ID.
-        buttonHtml = `<button id="tutorial-complete-btn" class="welcome-button child-btn" style="background-color: #00FFFF; color: #000;">✅ Mark as Read & Continue</button>`;
+        // Tutorial Mode: Simple "DONE" button
+        buttonHtml = `
+            <button id="tutorial-complete-btn" class="welcome-button child-btn" 
+                style="background-color: #00FFFF; color: #000; font-size: 1.5rem; padding: 20px; box-shadow: 6px 6px 0px #000;">
+                ✅ DONE
+            </button>`;
     }
 
     introCard.innerHTML = `
         <h2>${currentModule.title}</h2>
         <p style="font-size: 1rem; line-height: 1.8;">${currentModule.content}</p>
-        <div style="margin-top: 20px;">${buttonHtml}</div>
+        <div style="margin-top: 30px;">${buttonHtml}</div>
     `;
 
     quizContainer.appendChild(introCard);
@@ -92,13 +92,10 @@ function showIntro() {
     const startBtn = document.getElementById('start-btn');
     if (startBtn) startBtn.onclick = () => showQuestion();
 
-    // Logic for Tutorial Complete Button (FIX)
+    // Logic for Tutorial Complete Button (No saving progress needed anymore)
     const tutorialBtn = document.getElementById('tutorial-complete-btn');
     if (tutorialBtn) {
         tutorialBtn.onclick = () => {
-            // 1. Mark this tutorial as DONE
-            markModuleAsCompleted();
-            // 2. Go back to stages
             window.location.href = `stages.html?level_id=${currentModule.level_id}`;
         };
     }
@@ -142,18 +139,16 @@ function showQuestion() {
     quizContainer.appendChild(questionCard);
 }
 
-// 7. Handle Answer
+// 7. Handle Answer (No points added)
 function handleAnswer(selected, correct, explanation) {
     modalOverlay.style.display = 'flex';
     modalTimer.style.width = '100%';
     void modalTimer.offsetWidth; 
 
     if (selected === correct) {
-        currentPoints += POINTS_PER_QUESTION;
-        if (pointsDisplay) pointsDisplay.textContent = `POINTS: ${currentPoints}`;
         modalBox.className = 'feedback-modal success';
         modalTitle.textContent = '🎉 Correct! 🎉';
-        modalText.innerHTML = `${explanation || "Great job!"} <br><br> <span style="color:#FFFF00">+${POINTS_PER_QUESTION} Points!</span>`;
+        modalText.innerHTML = `${explanation || "Great job! You got it right."}`;
     } else {
         modalBox.className = 'feedback-modal error';
         modalTitle.textContent = '😢 Oops! 😢';
@@ -174,67 +169,24 @@ function handleAnswer(selected, correct, explanation) {
     }, 2000);
 }
 
-// Helper Function: Save Progress to LocalStorage
-function markModuleAsCompleted() {
-    const completedModules = JSON.parse(localStorage.getItem('completed_modules') || '[]');
-    const currentId = Number(currentModule.id);
-    
-    // Add if not exists
-    if (!completedModules.includes(currentId)) {
-        completedModules.push(currentId);
-        localStorage.setItem('completed_modules', JSON.stringify(completedModules));
-        console.log(`Module ${currentId} saved as completed.`);
-    }
-}
-
-// 8. Finish Screen (For Quizzes)
-async function showFinishScreen() {
+// 8. Finish Screen (Simple finish without leaderboard or saving unlock progress)
+function showFinishScreen() {
     quizContainer.innerHTML = '';
 
-    // Save Progress
-    markModuleAsCompleted();
-
-    // Check Level Completion Logic
-    const { data: nextModules } = await supabaseClient
-        .from('modules')
-        .select('id')
-        .eq('level_id', currentModule.level_id)
-        .gt('id', Number(currentModule.id)); 
-
-    if (!nextModules || nextModules.length === 0) {
-        const completedLevels = JSON.parse(localStorage.getItem('completed_levels') || '[]');
-        const currentLevelId = Number(currentModule.level_id);
-        if (!completedLevels.includes(currentLevelId)) {
-            completedLevels.push(currentLevelId);
-            localStorage.setItem('completed_levels', JSON.stringify(completedLevels));
-        }
-    }
-
-    // Show Score Modal
+    // Show Simple Mission Complete Modal
     modalBox.className = 'feedback-modal success';
     modalBox.style.textAlign = 'center';
     modalBox.innerHTML = `
         <h2 style="font-size: 2rem; color: #00FF00; margin-bottom: 20px;">🏆 MISSION COMPLETE! 🏆</h2>
-        <p style="font-size: 1.2rem; color: #FFFFFF;">Total Points: <span style="color:#FFFF00; font-size:1.5rem;">${currentPoints}</span></p>
-        <div style="margin-top: 30px; text-align: left;">
-            <label style="color: #fff; display:block; margin-bottom:10px;">Enter Name for Leaderboard:</label>
-            <input type="text" id="player-name" placeholder="Your Name" style="width:100%; padding:10px; border-radius:5px; border:none; margin-bottom:10px; font-family: 'Roboto', sans-serif;">
-        </div>
-        <button id="submit-score-btn" class="welcome-button child-btn" style="margin-top: 10px;">Submit Points & Exit</button>
-        <button id="skip-btn" style="background:transparent; border:none; color:#aaa; margin-top:10px; cursor:pointer; text-decoration:underline;">Skip & Exit</button>
+        <p style="font-size: 1.2rem; color: #FFFFFF;">You have defeated this challenge!</p>
+        
+        <button id="back-to-levels-btn" class="welcome-button child-btn" style="margin-top: 30px;">Back to Stages</button>
     `;
     
     if (modalTimer) modalTimer.style.display = 'none';
     modalOverlay.style.display = 'flex';
 
-    document.getElementById('submit-score-btn').onclick = async () => {
-        const playerName = document.getElementById('player-name').value;
-        if (!playerName) return alert("Please enter a name!");
-        await supabaseClient.from('leaderboard').insert([{ username: playerName, score: currentPoints }]);
-        window.location.href = `stages.html?level_id=${currentModule.level_id}`;
-    };
-
-    document.getElementById('skip-btn').onclick = () => {
+    document.getElementById('back-to-levels-btn').onclick = () => {
         window.location.href = `stages.html?level_id=${currentModule.level_id}`;
     };
 }

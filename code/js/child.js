@@ -31,44 +31,20 @@ async function loadLevels() {
 
     levelsContainer.innerHTML = '';
 
-    // === LEVEL UNLOCK LOGIC ===
-    // Get completed levels from LocalStorage
-    const rawStorage = JSON.parse(localStorage.getItem('completed_levels') || '[]');
-    const completedLevels = rawStorage.map(id => Number(id));
-
-    levels.forEach((level, index) => {
+    // Render all levels as unlocked
+    levels.forEach((level) => {
         const card = document.createElement('button');
         card.className = 'level-card large'; 
      
-        let isLocked = false;
-
-        // Logic: Level 1 is always unlocked. Level 2 needs Level 1 done.
-        if (index > 0) {
-            const previousLevelId = Number(levels[index - 1].id);
-            if (!completedLevels.includes(previousLevelId)) {
-                isLocked = true;
-            }
-        }
-
-        if (isLocked) {
-             // Locked Style
-             card.style.opacity = '0.5';
-             card.style.cursor = 'not-allowed';
-             card.style.filter = 'grayscale(100%)';
-             card.innerHTML = `
-                <h3 style="color:#aaa;">🔒 ${level.title}</h3>
-                <p>Complete previous level first!</p>
-            `;
-        } else {
-            // Unlocked Style
-            card.innerHTML = `
-                <h3>${level.title}</h3>
-                <p>${level.description}</p>
-            `;
-            card.addEventListener('click', () => {
-                window.location.href = `stages.html?level_id=${level.id}`;
-            });
-        }
+        card.innerHTML = `
+            <h3>${level.title}</h3>
+            <p>${level.description}</p>
+        `;
+        
+        // Add click event to all levels
+        card.addEventListener('click', () => {
+            window.location.href = `stages.html?level_id=${level.id}`;
+        });
 
         levelsContainer.appendChild(card);
     });

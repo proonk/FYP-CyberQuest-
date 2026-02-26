@@ -28,43 +28,21 @@ async function loadStages() {
 
     stagesContainer.innerHTML = ''; 
 
-    // Get Unlocked Modules
-    const rawStorage = JSON.parse(localStorage.getItem('completed_modules') || '[]');
-    const completedModules = rawStorage.map(id => Number(id));
-
-    modules.forEach((module, index) => {
+    // Render all modules as unlocked
+    modules.forEach((module) => {
         const stageCard = document.createElement('button');
         stageCard.className = 'level-card'; 
         
-        let isLocked = false;
+        stageCard.innerHTML = `
+            <h3>${module.title} 🔥</h3>
+            <p>${module.description || 'Click to start'}</p> 
+        `;
         
-        // LOCK LOGIC: Unlock next stage ONLY if previous stage is done.
-        if (index > 0) {
-            const previousModuleId = Number(modules[index - 1].id);
-            if (!completedModules.includes(previousModuleId)) {
-                isLocked = true;
-            }
-        }
-
-        if (isLocked) {
-            stageCard.style.opacity = '0.5';
-            stageCard.style.cursor = 'not-allowed';
-            stageCard.style.filter = 'grayscale(100%)'; 
-            stageCard.innerHTML = `
-                <h3 style="color: #aaa;">🔒 LOCKED</h3>
-                <p>Complete previous stage</p> 
-            `;
-        } else {
-            const isDone = completedModules.includes(Number(module.id));
-            const statusIcon = isDone ? '✅' : '🔥'; 
-            stageCard.innerHTML = `
-                <h3>${module.title} ${statusIcon}</h3>
-                <p>${module.description || 'Click to start'}</p> 
-            `;
-            stageCard.onclick = () => {
-                window.location.href = `quiz.html?module_id=${module.id}`;
-            };
-        }
+        // Add click event to all stages
+        stageCard.onclick = () => {
+            window.location.href = `quiz.html?module_id=${module.id}`;
+        };
+        
         stagesContainer.appendChild(stageCard);
     });
 }
