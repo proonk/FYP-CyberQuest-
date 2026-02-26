@@ -1,8 +1,8 @@
 const { createClient } = supabase;
 
 // 1. Supabase Configuration
-const SUPABASE_URL = 'https://brqisvltkrafajojozbr.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWlzdmx0a3JhZmFqb2pvemJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMjg1ODAsImV4cCI6MjA3NjcwNDU4MH0.BsGBK-ECEoC1SKRtHD0RZVL2m9iAOO8HKg7SLTnA8iM';
+const SUPABASE_URL = 'https://badvtexbyyohwytmpsjb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_nHnxonv351nxwOERvHNPgg_4ss7g1C7';
 
 // 2. Initialize Client
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
