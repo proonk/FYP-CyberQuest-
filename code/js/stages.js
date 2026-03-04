@@ -34,7 +34,7 @@ async function loadStages() {
         stageCard.className = 'level-card'; 
         
         stageCard.innerHTML = `
-            <h3>${module.title} 🔥</h3>
+            <h3>${module.title} </h3>
             <p>${module.description || 'Click to start'}</p> 
         `;
         
