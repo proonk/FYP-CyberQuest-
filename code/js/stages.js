@@ -28,13 +28,19 @@ async function loadStages() {
 
     stagesContainer.innerHTML = ''; 
 
-    // Render all modules as unlocked
-    modules.forEach((module) => {
+// Render all modules as unlocked
+    modules.forEach((module, index) => {
         const stageCard = document.createElement('button');
         stageCard.className = 'level-card'; 
         
+        let guideHtml = '';
+        if (index === 0) {
+            guideHtml = `<div class="guide-hint">👇 START HERE</div>`;
+        }
+
         stageCard.innerHTML = `
-            <h3>${module.title} </h3>
+            ${guideHtml}
+            <h3>${module.title}</h3>
             <p>${module.description || 'Click to start'}</p> 
         `;
         

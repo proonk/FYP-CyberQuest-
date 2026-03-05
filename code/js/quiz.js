@@ -180,14 +180,14 @@ function showFinishScreen() {
         <h2 style="font-size: 2rem; color: #00FF00; margin-bottom: 20px;">🏆 MISSION COMPLETE! 🏆</h2>
         <p style="font-size: 1.2rem; color: #FFFFFF;">You have defeated this challenge!</p>
         
-        <button id="back-to-levels-btn" class="welcome-button child-btn" style="margin-top: 30px;">Back to Stages</button>
+        <button id="back-to-levels-btn" class="welcome-button child-btn" style="margin-top: 30px;">Back to Level</button>
     `;
     
     if (modalTimer) modalTimer.style.display = 'none';
     modalOverlay.style.display = 'flex';
 
     document.getElementById('back-to-levels-btn').onclick = () => {
-        window.location.href = `stages.html?level_id=${currentModule.level_id}`;
+        window.location.href = `child.html?level_id=${currentModule.level_id}`;
     };
 }
 

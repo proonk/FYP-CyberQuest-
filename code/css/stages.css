@@ -24,20 +24,28 @@
 
 /* 🛑 CORRECTED: Grid layout for Stage Select (stages.html) */
 #stages-list-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 300px); 
-    gap: 20px;
-    justify-content: center;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;   
+    gap: 25px; /* 卡片之间的上下间距 */
+}
+
+#stages-list-container .level-card {
+    width: 80%;           
+    min-width: 300px;     
+    padding: 30px;
+    min-height: 120px;
 }
 
 .level-card {
     background-color: #1a1a4a;
     border: 4px solid #FFFFFF;
     border-radius: 0; 
-    padding: 20px;
+    padding: 35px; /* 里面的上下左右空间变大 */
     cursor: pointer;
     transition: all 0.1s ease-in-out;
     box-shadow: 8px 8px 0px #000000;
+    min-height: 180px; /* 保证卡片有一个更大的基础高度 */
 }
 
 .level-card:hover {
@@ -47,15 +55,17 @@
 }
 
 .level-card h3 {
-    font-size: 1rem;
+    font-size: 1.4rem; /* 标题从 1rem 放大到 1.4rem */
     color: #FFFF00;
-    margin: 0 0 10px 0;
+    margin: 0 0 15px 0;
+    line-height: 1.4; /* 让两行标题之间不会太挤 */
 }
 
+/* 把描述文字变大 */
 .level-card p {
-    font-size: 0.8rem; 
+    font-size: 1rem; /* 描述文字从 0.8rem 放大到 1rem */
     color: #DDDDDD;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .level-card.large {
@@ -91,4 +101,23 @@
 
 .back-button:hover {
     color: #FFFFFF;
+}
+
+
+.guide-hint {
+    color: #00FF00; 
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #000000;
+    animation: bounce 1s infinite; 
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px); 
+    }
 }
