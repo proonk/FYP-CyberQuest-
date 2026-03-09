@@ -1,7 +1,8 @@
 const { createClient } = supabase;
 
-const SUPABASE_URL = 'https://brqisvltkrafajojozbr.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWlzdmx0a3JhZmFqb2pvemJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMjg1ODAsImV4cCI6MjA3NjcwNDU4MH0.BsGBK-ECEoC1SKRtHD0RZVL2m9iAOO8HKg7SLTnA8iM';
+// 你的专属 Supabase 链接 (已核对正确)
+const SUPABASE_URL = 'https://badvtexbyyohwytmpsjb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_nHnxonv351nxwOERvHNPgg_4ss7g1C7';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const introContainer = document.getElementById('boss-intro-container');
@@ -43,7 +44,7 @@ async function loadBossData() {
 
     currentModule = module;
     allQuestions = module.quizzes || [];
-    
+
     if (backBtnElement) {
         backBtnElement.href = `stages.html?level_id=${currentModule.level_id}`;
     }
@@ -70,12 +71,21 @@ function showIntro() {
 }
 
 function showQuestion() {
-    questionArea.innerHTML = ''; 
+    questionArea.innerHTML = '';
     const quiz = allQuestions[currentQuestionIndex];
-    
+
     const questionCard = document.createElement('div');
     questionCard.className = 'quiz-question';
     questionCard.style.borderColor = '#FF0000';
+
+    // 🔥 这里就是验证新代码有没有跑的证据：回合数提示！
+    const progressText = document.createElement('h3');
+    progressText.style.color = '#FFD700';
+    progressText.style.textAlign = 'center';
+    progressText.style.marginBottom = '20px';
+    progressText.style.textShadow = '2px 2px 0px #000';
+    progressText.textContent = `⚔️ ROUND ${currentQuestionIndex + 1} / ${allQuestions.length} ⚔️`;
+    questionCard.appendChild(progressText);
 
     const questionText = document.createElement('p');
     questionText.style.fontSize = "1.2rem";
@@ -83,12 +93,12 @@ function showQuestion() {
     questionCard.appendChild(questionText);
 
     const answersWrapper = document.createElement('div');
-    answersWrapper.className = 'answers-wrapper'; 
+    answersWrapper.className = 'answers-wrapper';
 
     quiz.options.forEach(optionText => {
         const button = document.createElement('button');
         button.className = 'option-button';
-        button.style.backgroundColor = '#4a0000'; 
+        button.style.backgroundColor = '#4a0000';
         button.textContent = optionText;
         button.onclick = () => handleAnswer(optionText, quiz.correct_answer, quiz.explanation);
         answersWrapper.appendChild(button);
@@ -102,45 +112,54 @@ function handleAnswer(selected, correct, explanation) {
     modalOverlay.style.display = 'flex';
 
     if (selected === correct) {
-        // Boss hit
+        // Boss 受到暴击
         modalBox.className = 'feedback-modal success';
         modalTitle.textContent = '💥 DIRECT HIT! 💥';
         modalText.innerHTML = `${explanation}`;
-        
+
         let damage = 100 / allQuestions.length;
         bossHp -= damage;
+        if (bossHp < 0) bossHp = 0; // 防止血条穿模
         bossHpBar.style.width = `${bossHp}%`;
-        
-        // Boss shake
-        bossImg.classList.add('shake');
-        setTimeout(() => bossImg.classList.remove('shake'), 500);
+
+        bossImg.classList.add('shake', 'boss-hit-flash');
+        setTimeout(() => bossImg.classList.remove('shake', 'boss-hit-flash'), 500);
 
     } else {
-        // player heart
+        // 玩家受重伤，屏幕开始地震
         modalBox.className = 'feedback-modal error';
         modalTitle.textContent = '🩸 YOU GOT HIT! 🩸';
         modalText.textContent = explanation || `The correct answer was: ${correct}`;
 
-        playerLives--;
+        playerLives = Math.max(0, playerLives - 1);
+
         let hearts = '';
-        for(let i=0; i<playerLives; i++) hearts += '❤️';
-        for(let i=playerLives; i<3; i++) hearts += '🖤';
+        for(let i = 0; i < playerLives; i++) hearts += '❤️';
+        for(let i = playerLives; i < 3; i++) hearts += '🖤';
         playerHearts.textContent = hearts;
+
+        // 🔥 触发暴力的网页大地震特效
+        document.body.classList.add('website-shake');
+        setTimeout(() => document.body.classList.remove('website-shake'), 600);
     }
 
     nextBtn.onclick = () => {
-        modalOverlay.style.display = 'none'; 
-        
+        modalOverlay.style.display = 'none';
+
+        // 没命了直接死
         if (playerLives <= 0) {
             showGameOver();
             return;
         }
 
+        // 命还在，就进下一题
         currentQuestionIndex++;
         if (currentQuestionIndex < allQuestions.length) {
-            showQuestion(); 
+            showQuestion();
         } else {
-            showVictory(); 
+            // 题目打完，强制 Boss 血条归零，显示胜利！
+            bossHpBar.style.width = '0%';
+            showVictory();
         }
     };
 }
