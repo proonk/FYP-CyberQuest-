@@ -18,21 +18,24 @@ const modalText = document.getElementById('feedback-text');
 const nextBtn = document.getElementById('next-question-btn');
 const backBtnElement = document.getElementById('boss-back-btn');
 
-// 🔥 突发事件 Elements
 const attackOverlay = document.getElementById('hacker-attack-overlay');
-const defenseInput = document.getElementById('defense-password');
-const defenseBtn = document.getElementById('submit-defense-btn');
-const attackFeedback = document.getElementById('attack-feedback');
 
 let currentModule = null;
 let allQuestions = [];
 let currentQuestionIndex = 0;
 
-// 🔥 真正的 RPG 状态！
 let playerLives = 3;
 let bossHp = 100;
-const DAMAGE_PER_HIT = 25; // Boss 需要被答对 4 次才会死 (100 / 25 = 4)
-let hasHackerAttacked = false; // 记录是否触发过突袭
+const DAMAGE_PER_HIT = 20; 
+let hasHackerAttacked = false; 
+
+// 🔥 新增：专业的洗牌算法 (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
 async function loadBossData() {
     const params = new URLSearchParams(window.location.search);
@@ -49,7 +52,6 @@ async function loadBossData() {
 
     currentModule = module;
     
-    // 过滤重复题目
     let uniqueQuestions = [];
     let seen = new Set();
     for (let q of (module.quizzes || [])) {
@@ -58,7 +60,12 @@ async function loadBossData() {
             uniqueQuestions.push(q);
         }
     }
+    
     allQuestions = uniqueQuestions; 
+    
+    // 🔥 核心改动 1：游戏开始前，把这 15 道题彻底洗牌打乱！
+    shuffleArray(allQuestions);
+    currentQuestionIndex = 0; // 永远从洗好的第一张牌开始抽
 
     if (backBtnElement) backBtnElement.href = `stages.html?level_id=${currentModule.level_id}`;
     showIntro();
@@ -78,15 +85,8 @@ function showIntro() {
     document.getElementById('start-boss-btn').onclick = () => {
         introContainer.style.display = 'none';
         arenaContainer.style.display = 'block';
-        pickRandomQuestion(); // 开始游戏，抽第一题！
+        showQuestion(); // 直接显示第一张牌的题目
     };
-}
-
-// 🔥 无限模式：随机抽题，不再死板地按顺序！
-function pickRandomQuestion() {
-    // 随机选一题
-    currentQuestionIndex = Math.floor(Math.random() * allQuestions.length);
-    showQuestion();
 }
 
 function showQuestion() {
@@ -97,7 +97,6 @@ function showQuestion() {
     questionCard.className = 'quiz-question';
     questionCard.style.borderColor = '#FF0000';
 
-    // 不再显示第几题，而是显示战斗中
     const progressText = document.createElement('h3');
     progressText.style.color = '#FFD700'; 
     progressText.style.textAlign = 'center';
@@ -148,7 +147,6 @@ function handleAnswer(selected, correct, explanation) {
 
         playerLives = Math.max(0, playerLives - 1); 
         updateHearts();
-
         document.body.classList.add('website-shake');
         setTimeout(() => document.body.classList.remove('website-shake'), 600);
     }
@@ -166,81 +164,115 @@ function updateHearts() {
     playerHearts.textContent = hearts;
 }
 
-// 🔥 核心游戏流程控制器
 function checkGameStatus() {
     if (playerLives <= 0) {
         showGameOver();
         return;
     }
     
-    if (bossHp <= 0) {
+    if (bossHp <= 20 && !hasHackerAttacked) {
+        startHackerAttackSequence();
+    } else if (bossHp <= 0) {
         showVictory();
-        return;
-    }
-
-    // 🌟 重点：如果 Boss 血量掉到一半 (50)，并且还没触发过，就发动黑客突袭！
-    if (bossHp <= 50 && !hasHackerAttacked) {
-        triggerHackerAttack();
     } else {
-        // 还没死，就继续随机抽题，无限战斗！
-        pickRandomQuestion(); 
+        // 🔥 核心改动 2：不再掷骰子随机抽，而是按洗好的牌堆，往下拿新的一张牌！
+        currentQuestionIndex++; 
+        
+        // 防御机制：万一遇到极小概率，玩家把 15 张牌全抽完了还没结束，就再洗一次牌重头开始
+        if (currentQuestionIndex >= allQuestions.length) {
+            shuffleArray(allQuestions);
+            currentQuestionIndex = 0;
+        }
+        
+        showQuestion(); 
     }
 }
 
 // ==========================================
-// 🚨 史诗级事件：黑客突发攻击 (造密码模拟) 🚨
+// 🚨 史诗级三连击事件管理器 🚨
 // ==========================================
-function triggerHackerAttack() {
-    hasHackerAttacked = true; // 标记已经突袭过，防止无限触发
+function startHackerAttackSequence() {
+    hasHackerAttacked = true;
     attackOverlay.style.display = 'flex';
-    document.body.classList.add('website-shake'); // 出场震撼
+    document.body.classList.add('website-shake'); 
     setTimeout(() => document.body.classList.remove('website-shake'), 600);
     
-    defenseInput.value = '';
-    attackFeedback.textContent = '';
-    
-    defenseBtn.onclick = () => {
-        const pwd = defenseInput.value;
-        // 检查密码规则：至少 8 位，包含数字，包含特殊符号
-        const hasNumber = /\d/.test(pwd);
-        const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
-        const isLongEnough = pwd.length >= 8;
+    showAttackStep(1); 
+}
 
-        if (hasNumber && hasSymbol && isLongEnough) {
-            // 防御成功！
+function showAttackStep(stepNumber) {
+    document.getElementById('attack-step-1').style.display = 'none';
+    document.getElementById('attack-step-2').style.display = 'none';
+    document.getElementById('attack-step-3').style.display = 'none';
+    
+    document.getElementById(`attack-step-${stepNumber}`).style.display = 'block';
+
+    if (stepNumber === 1) {
+        const btn = document.getElementById('btn-step-1');
+        const input = document.getElementById('defense-password');
+        const feedback = document.getElementById('feedback-step-1');
+        input.value = '';
+        feedback.textContent = '';
+        
+        btn.onclick = () => {
+            const pwd = input.value;
+            if (/\d/.test(pwd) && /[!@#$%^&*(),.?":{}|<>]/.test(pwd) && pwd.length >= 8) {
+                showAttackStep(2); 
+            } else {
+                punishPlayer(feedback, "Too weak! Try again!");
+            }
+        };
+    }
+    
+    if (stepNumber === 2) {
+        const btnWrong = document.getElementById('btn-step-2-wrong');
+        const btnRight = document.getElementById('btn-step-2-right');
+        const feedback = document.getElementById('feedback-step-2');
+        feedback.textContent = '';
+        
+        btnRight.onclick = () => showAttackStep(3); 
+        btnWrong.onclick = () => punishPlayer(feedback, "It's a trap! Never click strange links!");
+    }
+
+    if (stepNumber === 3) {
+        const btnWrong = document.getElementById('btn-step-3-wrong');
+        const btnRight = document.getElementById('btn-step-3-right');
+        const feedback = document.getElementById('feedback-step-3');
+        feedback.textContent = '';
+        
+        btnRight.onclick = () => {
             attackOverlay.style.display = 'none';
+            bossHp = 0;
+            bossHpBar.style.width = '0%';
+            
             modalBox.className = 'feedback-modal success';
-            modalTitle.textContent = '🛡️ FIREWALL RESTORED! 🛡️';
-            modalText.textContent = 'Incredible! Your strong password blocked the attack and reflected damage back to the Hacker!';
+            modalTitle.textContent = '🛡️ ULTIMATE DEFENSE! 🛡️';
+            modalText.textContent = 'You survived the Hacker\'s Ultimate Attack! The reflected damage destroyed him!';
             modalOverlay.style.display = 'flex';
             
-            // 奖励：Boss 额外扣血
-            bossHp -= DAMAGE_PER_HIT;
-            bossHpBar.style.width = `${bossHp}%`;
             bossImg.classList.add('shake', 'boss-hit-flash');
-            setTimeout(() => bossImg.classList.remove('shake', 'boss-hit-flash'), 500);
-
+            
             nextBtn.onclick = () => {
                 modalOverlay.style.display = 'none';
-                checkGameStatus(); // 检查是不是因为这下额外伤害直接赢了
+                showVictory();
             };
+        };
+        btnWrong.onclick = () => punishPlayer(feedback, "Fake Virus! Never download from pop-ups!");
+    }
+}
 
-        } else {
-            // 防御失败：报错并扣血！
-            attackFeedback.textContent = "Weak Password! Try again!";
-            document.body.classList.add('website-shake');
-            setTimeout(() => document.body.classList.remove('website-shake'), 400);
-            
-            // 惩罚：玩家扣一滴血
-            playerLives = Math.max(0, playerLives - 1);
-            updateHearts();
-            
-            if (playerLives <= 0) {
-                attackOverlay.style.display = 'none';
-                showGameOver();
-            }
-        }
-    };
+function punishPlayer(feedbackElement, message) {
+    feedbackElement.textContent = message;
+    document.body.classList.add('website-shake');
+    setTimeout(() => document.body.classList.remove('website-shake'), 400);
+    
+    playerLives = Math.max(0, playerLives - 1);
+    updateHearts();
+    
+    if (playerLives <= 0) {
+        attackOverlay.style.display = 'none';
+        showGameOver();
+    }
 }
 
 function showGameOver() {
