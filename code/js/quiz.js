@@ -14,7 +14,7 @@ const modalOverlay = document.getElementById('feedback-overlay');
 const modalBox = document.getElementById('feedback-box');
 const modalTitle = document.getElementById('feedback-title');
 const modalText = document.getElementById('feedback-text');
-const modalTimer = document.getElementById('feedback-timer');
+const nextBtn = document.getElementById('next-question-btn');
 const backBtnElement = document.getElementById('quiz-back-btn');
 
 // Global Variables
@@ -139,11 +139,9 @@ function showQuestion() {
     quizContainer.appendChild(questionCard);
 }
 
-// 7. Handle Answer (No points added)
+// 7. Handle Answer 
 function handleAnswer(selected, correct, explanation) {
     modalOverlay.style.display = 'flex';
-    modalTimer.style.width = '100%';
-    void modalTimer.offsetWidth; 
 
     if (selected === correct) {
         modalBox.className = 'feedback-modal success';
@@ -155,39 +153,36 @@ function handleAnswer(selected, correct, explanation) {
         modalText.textContent = explanation || `The correct answer was: ${correct}`;
     }
 
-    modalTimer.style.transition = 'width 2s linear';
-    modalTimer.style.width = '0%';
-
-    setTimeout(() => {
+    nextBtn.onclick = () => {
         modalOverlay.style.display = 'none'; 
         currentQuestionIndex++;
+        
         if (currentQuestionIndex < allQuestions.length) {
             showQuestion(); 
         } else {
             showFinishScreen(); 
         }
-    }, 2000);
+    };
 }
 
-// 8. Finish Screen (Simple finish without leaderboard or saving unlock progress)
+
+// 8. Finish Screen 
 function showFinishScreen() {
     quizContainer.innerHTML = '';
 
-    // Show Simple Mission Complete Modal
     modalBox.className = 'feedback-modal success';
     modalBox.style.textAlign = 'center';
     modalBox.innerHTML = `
         <h2 style="font-size: 2rem; color: #00FF00; margin-bottom: 20px;">🏆 MISSION COMPLETE! 🏆</h2>
         <p style="font-size: 1.2rem; color: #FFFFFF;">You have defeated this challenge!</p>
         
-        <button id="back-to-levels-btn" class="welcome-button child-btn" style="margin-top: 30px;">Back to Level</button>
+        <button id="back-to-levels-btn" class="welcome-button child-btn" style="margin-top: 30px;">Back to Stages</button>
     `;
     
-    if (modalTimer) modalTimer.style.display = 'none';
     modalOverlay.style.display = 'flex';
 
     document.getElementById('back-to-levels-btn').onclick = () => {
-        window.location.href = `child.html?level_id=${currentModule.level_id}`;
+        window.location.href = `stages.html?level_id=${currentModule.level_id}`;
     };
 }
 
