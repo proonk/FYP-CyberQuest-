@@ -1,6 +1,5 @@
 const { createClient } = supabase;
 
-// 你的专属 Supabase 链接 (已核对正确)
 const SUPABASE_URL = 'https://badvtexbyyohwytmpsjb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_nHnxonv351nxwOERvHNPgg_4ss7g1C7';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -19,36 +18,49 @@ const modalText = document.getElementById('feedback-text');
 const nextBtn = document.getElementById('next-question-btn');
 const backBtnElement = document.getElementById('boss-back-btn');
 
+// 🔥 突发事件 Elements
+const attackOverlay = document.getElementById('hacker-attack-overlay');
+const defenseInput = document.getElementById('defense-password');
+const defenseBtn = document.getElementById('submit-defense-btn');
+const attackFeedback = document.getElementById('attack-feedback');
+
 let currentModule = null;
 let allQuestions = [];
 let currentQuestionIndex = 0;
+
+// 🔥 真正的 RPG 状态！
 let playerLives = 3;
 let bossHp = 100;
+const DAMAGE_PER_HIT = 25; // Boss 需要被答对 4 次才会死 (100 / 25 = 4)
+let hasHackerAttacked = false; // 记录是否触发过突袭
 
 async function loadBossData() {
     const params = new URLSearchParams(window.location.search);
     const moduleId = params.get('module_id');
-
     if (!moduleId) return;
 
     const { data: module, error } = await supabaseClient
         .from('modules')
-        .select(`*, quizzes ( *, explanation )`)
+        .select(`*, quizzes (*)`)
         .eq('id', moduleId)
         .single();
 
-    if (error) {
-        introContainer.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-    }
+    if (error) return;
 
     currentModule = module;
-    allQuestions = module.quizzes || [];
-
-    if (backBtnElement) {
-        backBtnElement.href = `stages.html?level_id=${currentModule.level_id}`;
+    
+    // 过滤重复题目
+    let uniqueQuestions = [];
+    let seen = new Set();
+    for (let q of (module.quizzes || [])) {
+        if (!seen.has(q.question)) {
+            seen.add(q.question);
+            uniqueQuestions.push(q);
+        }
     }
+    allQuestions = uniqueQuestions; 
 
+    if (backBtnElement) backBtnElement.href = `stages.html?level_id=${currentModule.level_id}`;
     showIntro();
 }
 
@@ -66,25 +78,31 @@ function showIntro() {
     document.getElementById('start-boss-btn').onclick = () => {
         introContainer.style.display = 'none';
         arenaContainer.style.display = 'block';
-        showQuestion();
+        pickRandomQuestion(); // 开始游戏，抽第一题！
     };
 }
 
-function showQuestion() {
-    questionArea.innerHTML = '';
-    const quiz = allQuestions[currentQuestionIndex];
+// 🔥 无限模式：随机抽题，不再死板地按顺序！
+function pickRandomQuestion() {
+    // 随机选一题
+    currentQuestionIndex = Math.floor(Math.random() * allQuestions.length);
+    showQuestion();
+}
 
+function showQuestion() {
+    questionArea.innerHTML = ''; 
+    const quiz = allQuestions[currentQuestionIndex];
+    
     const questionCard = document.createElement('div');
     questionCard.className = 'quiz-question';
     questionCard.style.borderColor = '#FF0000';
 
-    // 🔥 这里就是验证新代码有没有跑的证据：回合数提示！
+    // 不再显示第几题，而是显示战斗中
     const progressText = document.createElement('h3');
-    progressText.style.color = '#FFD700';
+    progressText.style.color = '#FFD700'; 
     progressText.style.textAlign = 'center';
     progressText.style.marginBottom = '20px';
-    progressText.style.textShadow = '2px 2px 0px #000';
-    progressText.textContent = `⚔️ ROUND ${currentQuestionIndex + 1} / ${allQuestions.length} ⚔️`;
+    progressText.textContent = `⚔️ BATTLE IN PROGRESS... ⚔️`;
     questionCard.appendChild(progressText);
 
     const questionText = document.createElement('p');
@@ -93,12 +111,12 @@ function showQuestion() {
     questionCard.appendChild(questionText);
 
     const answersWrapper = document.createElement('div');
-    answersWrapper.className = 'answers-wrapper';
+    answersWrapper.className = 'answers-wrapper'; 
 
     quiz.options.forEach(optionText => {
         const button = document.createElement('button');
         button.className = 'option-button';
-        button.style.backgroundColor = '#4a0000';
+        button.style.backgroundColor = '#4a0000'; 
         button.textContent = optionText;
         button.onclick = () => handleAnswer(optionText, quiz.correct_answer, quiz.explanation);
         answersWrapper.appendChild(button);
@@ -112,54 +130,115 @@ function handleAnswer(selected, correct, explanation) {
     modalOverlay.style.display = 'flex';
 
     if (selected === correct) {
-        // Boss 受到暴击
         modalBox.className = 'feedback-modal success';
         modalTitle.textContent = '💥 DIRECT HIT! 💥';
         modalText.innerHTML = `${explanation}`;
-
-        let damage = 100 / allQuestions.length;
-        bossHp -= damage;
-        if (bossHp < 0) bossHp = 0; // 防止血条穿模
+        
+        bossHp -= DAMAGE_PER_HIT;
+        if (bossHp < 0) bossHp = 0; 
         bossHpBar.style.width = `${bossHp}%`;
-
+        
         bossImg.classList.add('shake', 'boss-hit-flash');
         setTimeout(() => bossImg.classList.remove('shake', 'boss-hit-flash'), 500);
 
     } else {
-        // 玩家受重伤，屏幕开始地震
         modalBox.className = 'feedback-modal error';
         modalTitle.textContent = '🩸 YOU GOT HIT! 🩸';
         modalText.textContent = explanation || `The correct answer was: ${correct}`;
 
-        playerLives = Math.max(0, playerLives - 1);
+        playerLives = Math.max(0, playerLives - 1); 
+        updateHearts();
 
-        let hearts = '';
-        for(let i = 0; i < playerLives; i++) hearts += '❤️';
-        for(let i = playerLives; i < 3; i++) hearts += '🖤';
-        playerHearts.textContent = hearts;
-
-        // 🔥 触发暴力的网页大地震特效
         document.body.classList.add('website-shake');
         setTimeout(() => document.body.classList.remove('website-shake'), 600);
     }
 
     nextBtn.onclick = () => {
-        modalOverlay.style.display = 'none';
+        modalOverlay.style.display = 'none'; 
+        checkGameStatus();
+    };
+}
 
-        // 没命了直接死
-        if (playerLives <= 0) {
-            showGameOver();
-            return;
-        }
+function updateHearts() {
+    let hearts = '';
+    for(let i = 0; i < playerLives; i++) hearts += '❤️';
+    for(let i = playerLives; i < 3; i++) hearts += '🖤';
+    playerHearts.textContent = hearts;
+}
 
-        // 命还在，就进下一题
-        currentQuestionIndex++;
-        if (currentQuestionIndex < allQuestions.length) {
-            showQuestion();
+// 🔥 核心游戏流程控制器
+function checkGameStatus() {
+    if (playerLives <= 0) {
+        showGameOver();
+        return;
+    }
+    
+    if (bossHp <= 0) {
+        showVictory();
+        return;
+    }
+
+    // 🌟 重点：如果 Boss 血量掉到一半 (50)，并且还没触发过，就发动黑客突袭！
+    if (bossHp <= 50 && !hasHackerAttacked) {
+        triggerHackerAttack();
+    } else {
+        // 还没死，就继续随机抽题，无限战斗！
+        pickRandomQuestion(); 
+    }
+}
+
+// ==========================================
+// 🚨 史诗级事件：黑客突发攻击 (造密码模拟) 🚨
+// ==========================================
+function triggerHackerAttack() {
+    hasHackerAttacked = true; // 标记已经突袭过，防止无限触发
+    attackOverlay.style.display = 'flex';
+    document.body.classList.add('website-shake'); // 出场震撼
+    setTimeout(() => document.body.classList.remove('website-shake'), 600);
+    
+    defenseInput.value = '';
+    attackFeedback.textContent = '';
+    
+    defenseBtn.onclick = () => {
+        const pwd = defenseInput.value;
+        // 检查密码规则：至少 8 位，包含数字，包含特殊符号
+        const hasNumber = /\d/.test(pwd);
+        const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+        const isLongEnough = pwd.length >= 8;
+
+        if (hasNumber && hasSymbol && isLongEnough) {
+            // 防御成功！
+            attackOverlay.style.display = 'none';
+            modalBox.className = 'feedback-modal success';
+            modalTitle.textContent = '🛡️ FIREWALL RESTORED! 🛡️';
+            modalText.textContent = 'Incredible! Your strong password blocked the attack and reflected damage back to the Hacker!';
+            modalOverlay.style.display = 'flex';
+            
+            // 奖励：Boss 额外扣血
+            bossHp -= DAMAGE_PER_HIT;
+            bossHpBar.style.width = `${bossHp}%`;
+            bossImg.classList.add('shake', 'boss-hit-flash');
+            setTimeout(() => bossImg.classList.remove('shake', 'boss-hit-flash'), 500);
+
+            nextBtn.onclick = () => {
+                modalOverlay.style.display = 'none';
+                checkGameStatus(); // 检查是不是因为这下额外伤害直接赢了
+            };
+
         } else {
-            // 题目打完，强制 Boss 血条归零，显示胜利！
-            bossHpBar.style.width = '0%';
-            showVictory();
+            // 防御失败：报错并扣血！
+            attackFeedback.textContent = "Weak Password! Try again!";
+            document.body.classList.add('website-shake');
+            setTimeout(() => document.body.classList.remove('website-shake'), 400);
+            
+            // 惩罚：玩家扣一滴血
+            playerLives = Math.max(0, playerLives - 1);
+            updateHearts();
+            
+            if (playerLives <= 0) {
+                attackOverlay.style.display = 'none';
+                showGameOver();
+            }
         }
     };
 }
@@ -169,11 +248,10 @@ function showGameOver() {
     modalBox.className = 'feedback-modal error';
     modalBox.innerHTML = `
         <h2 style="font-size: 2.5rem; color: #FF0000; margin-bottom: 20px;">💀 GAME OVER 💀</h2>
-        <p style="font-size: 1.2rem; color: #FFF;">The Hacker stole the data. Don't give up, Cyber Ranger!</p>
+        <p style="font-size: 1.2rem; color: #FFF;">The Hacker broke your defenses...</p>
         <button id="retry-btn" class="welcome-button" style="background-color: #FF0000; color: #FFF; margin-top: 30px;">Try Again</button>
     `;
     modalOverlay.style.display = 'flex';
-
     document.getElementById('retry-btn').onclick = () => window.location.reload();
 }
 
@@ -182,14 +260,11 @@ function showVictory() {
     modalBox.className = 'feedback-modal success';
     modalBox.innerHTML = `
         <h2 style="font-size: 2.5rem; color: #FFD700; margin-bottom: 20px; text-shadow: 3px 3px #FF0000;">🌟 HACKER DEFEATED! 🌟</h2>
-        <p style="font-size: 1.2rem; color: #FFF;">You saved the digital world! You are a true Cyber Hero!</p>
+        <p style="font-size: 1.2rem; color: #FFF;">You are the ultimate Cyber Hero!</p>
         <button id="win-btn" class="welcome-button" style="background-color: #00FF00; color: #000; margin-top: 30px;">Return to Portal</button>
     `;
     modalOverlay.style.display = 'flex';
-
-    document.getElementById('win-btn').onclick = () => {
-        window.location.href = 'child.html';
-    };
+    document.getElementById('win-btn').onclick = () => window.location.href = 'child.html';
 }
 
 document.addEventListener('DOMContentLoaded', loadBossData);
