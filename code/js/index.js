@@ -1,9 +1,8 @@
 const nameInput = document.getElementById('name-input');
-const childButton = document.getElementById('btn-child');
-const teenButton = document.getElementById('btn-teen');
+const startButton = document.getElementById('btn-start');
 
-childButton.addEventListener('click', () => {
-    let userName = nameInput.value;
+startButton.addEventListener('click', () => {
+    let userName = nameInput.value.trim();
     if (userName === '') {
         userName = 'Explorer';
     }
@@ -11,19 +10,10 @@ childButton.addEventListener('click', () => {
     localStorage.setItem('userName', userName);
     localStorage.setItem('ageGroup', 'child');
 
-
-    window.location.href = 'child.html'; 
+    window.location.href = 'child.html';
 });
 
-
-teenButton.addEventListener('click', () => {
-    let userName = nameInput.value;
-    if (userName === '') {
-        userName = 'Explorer';
-    }
-    
-    localStorage.setItem('userName', userName);
-    localStorage.setItem('ageGroup', 'teen');
-
-    alert('Wait Reagan Tongggggggggggggg');
+// Allow pressing Enter to start
+nameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') startButton.click();
 });

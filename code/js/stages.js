@@ -46,7 +46,13 @@ async function loadStages() {
         
         // Add click event to all stages
         stageCard.onclick = () => {
-            window.location.href = `quiz.html?module_id=${module.id}`;
+            if (module.level_id === 4) {
+                // If it is Boss, go boss.html
+                window.location.href = `boss.html?module_id=${module.id}`;
+            } else {
+                // IF it is normal, go quiz.html
+                window.location.href = `quiz.html?module_id=${module.id}`;
+            }
         };
         
         stagesContainer.appendChild(stageCard);

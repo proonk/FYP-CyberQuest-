@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberQuest - BOSS FIGHT!</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/boss.css">
+</head>
+<body class="pixel-art-body boss-bg">
+
+    <header class="pixel-header">
+        <a href="#" id="boss-back-btn" class="back-button">:: Run Away ::</a>
+        <h1 style="color: #FF0000; text-shadow: 4px 4px 0px #000;">FINAL BOSS</h1>
+    </header>
+
+    <main class="pixel-main-content">
+        <div id="boss-intro-container">
+            <p class="loading-message">... WARNING! BOSS APPROACHING ...</p>
+        </div>
+
+        <div id="boss-arena-container" style="display: none;">
+            
+            <div class="boss-status-box">
+                <img src="img/Boss.gif" id="boss-img" class="boss-avatar">
+                <p class="boss-name">HACKER BOSS</p>
+                <div class="hp-bar-bg">
+                    <div id="boss-hp-bar" class="hp-bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="player-status-box">
+                <span>Your Lives: </span>
+                <span id="player-hearts">❤️❤️❤️</span>
+            </div>
+
+            <div id="boss-question-area"></div>
+        </div>
+    </main>
+
+    <div id="feedback-overlay" class="modal-overlay">
+        <div id="feedback-box" class="feedback-modal">
+            <h2 id="feedback-title"></h2>
+            <p id="feedback-text" class="feedback-message"></p>
+            <button id="next-question-btn" class="welcome-button" style="background-color: #FF0000; color: #FFF; margin-top: 20px;">NEXT ➡</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/boss.js"></script>
+</body>
+</html>

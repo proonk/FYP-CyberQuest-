@@ -3,25 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to CyberQuest</title>
-    
+    <title>CyberQuest - Welcome!</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/index.css">
+
+
 </head>
-<body class="welcome-body"> <header class="welcome-header"> <h1 class="logo-font">CyberQuest</h1>
+<body class="welcome-body">
+
+    <header class="welcome-header">
+        <h1 class="logo-font">
+            ⚔️ CyberQuest
+            <span class="logo-subtitle">:: CYBER SAFETY ADVENTURE ::</span>
+        </h1>
     </header>
 
-    <main class="welcome-main"> <div class="welcome-portal"> <h2>:: Welcome, Explorer! ::</h2>
-            
-            <p>Please enter your name:</p>
-            <input type="text" id="name-input" class="welcome-input" placeholder="Your name..."> <p>Please choose your journey:</p>
-            <button id="btn-child" class="welcome-button child-btn">Child Zone (6-12 years)</button>
-            <button id="btn-teen" class="welcome-button teen-btn">Teen Zone (13+ years)</button>
-        </div>
+    <main class="welcome-main">
+        <div class="welcome-portal">
 
+            <span class="pixel-character">🧙</span>
+            <h2>:: NEW ADVENTURER ::</h2>
+
+            <label class="input-label" for="name-input">▶ ENTER YOUR NAME</label>
+            <input
+                type="text"
+                id="name-input"
+                class="welcome-input"
+                placeholder="Explorer..."
+                maxlength="20"
+                autocomplete="off"
+            >
+
+            <button id="btn-start" class="welcome-button start-btn">
+                <span class="btn-icon">⚔️</span>
+                START ADVENTURE
+            </button>
+
+        </div>
     </main>
 
     <script type="module" src="js/index.js"></script>

@@ -1,123 +1,115 @@
-/* 🛑 CORRECTED: Vertical layout for Level Select (child.html) */
-#levels-list-container {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;   
-    gap: 25px;             
-}
-
-#levels-list-container .level-card {
-    width: 80%;           
-    min-width: 300px;     
-    padding: 30px;
-    min-height: 100px;
-}
-
-#levels-list-container .level-card h3 {
-    font-size: 1.5rem; 
-}
-
-#levels-list-container .level-card p {
-    font-size: 1rem;  
-    line-height: 1.6; 
-}
-
-/* 🛑 CORRECTED: Grid layout for Stage Select (stages.html) */
+#levels-list-container,
 #stages-list-container {
     display: flex;
-    flex-direction: column; 
-    align-items: center;   
-    gap: 25px; /* 卡片之间的上下间距 */
-}
-
-#stages-list-container .level-card {
-    width: 80%;           
-    min-width: 300px;     
-    padding: 30px;
-    min-height: 120px;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding-bottom: 80px;
 }
 
 .level-card {
-    background-color: #1a1a4a;
+    width: 92%;
+    max-width: 780px;
+    min-width: 280px;
+    background-color: #0d0d3a;
     border: 4px solid #FFFFFF;
-    border-radius: 0; 
-    padding: 35px; /* 里面的上下左右空间变大 */
+    padding: 30px 36px;
     cursor: pointer;
-    transition: all 0.1s ease-in-out;
-    box-shadow: 8px 8px 0px #000000;
-    min-height: 180px; /* 保证卡片有一个更大的基础高度 */
+    transition: transform 0.08s ease, box-shadow 0.08s ease, border-color 0.15s;
+    box-shadow: 6px 6px 0px #000000;
+    text-align: left;
+    font-family: 'Press Start 2P', cursive;
+    position: relative;
+    overflow: hidden;
+    animation: cardIn 0.25s ease both;
+}
+
+.level-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 10px; height: 10px;
+    background: #FFFF00;
+}
+.level-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 10px; height: 10px;
+    background: #FFFF00;
 }
 
 .level-card:hover {
-    background-color: #2a2a6a;
-    box-shadow: 8px 8px 0px #00FF00; 
-    transform: translate(2px, 2px);
+    background-color: #1a1a5a;
+    border-color: #00FFFF;
+    box-shadow: 6px 6px 0px #00AAAA;
+    transform: translate(-3px, -3px);
+}
+.level-card:hover::before,
+.level-card:hover::after { background: #00FFFF; }
+
+.level-card:active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0px #000;
 }
 
+/* Title — bigger, more readable */
 .level-card h3 {
-    font-size: 1.4rem; /* 标题从 1rem 放大到 1.4rem */
+    font-size: 1.15rem;
     color: #FFFF00;
-    margin: 0 0 15px 0;
-    line-height: 1.4; /* 让两行标题之间不会太挤 */
+    margin: 0 0 14px 0;
+    line-height: 1.7;
+    text-shadow: 2px 2px 0 #000;
 }
 
-/* 把描述文字变大 */
+/* Description — bigger, lighter color, more breathing room */
 .level-card p {
-    font-size: 1rem; /* 描述文字从 0.8rem 放大到 1rem */
-    color: #DDDDDD;
-    line-height: 1.6;
+    font-size: 0.78rem;
+    color: #CCCCCC;
+    line-height: 2;
+    margin: 0;
 }
 
 .level-card.large {
-    width: 80%;           
-    min-width: 300px;     
-    padding: 30px;
-    min-height: 100px;
+    padding: 32px 38px;
 }
-
 .level-card.large h3 {
-    font-size: 1.5rem; 
+    font-size: 1.2rem;
+    margin-bottom: 16px;
 }
-
 .level-card.large p {
-    font-size: 1rem;  
-    line-height: 1.6; 
-}
-
-.loading-message {
-    font-size: 1rem;
-    color: #FFFF00;
-}
-
-.back-button {
-    font-family: 'Press Start 2P', cursive;
-    text-decoration: none;
-    color: #FFFF00;
-    position: absolute;
-    top: 20px;
-    left: 20px;
     font-size: 0.8rem;
 }
 
-.back-button:hover {
-    color: #FFFFFF;
-}
-
-
 .guide-hint {
-    color: #00FF00; 
-    font-size: 0.9rem;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 0px #000000;
-    animation: bounce 1s infinite; 
+    color: #00FF00;
+    font-size: 0.65rem;
+    margin-bottom: 12px;
+    text-shadow: 2px 2px 0px #000;
+    animation: bounce 0.8s steps(2) infinite;
+    display: inline-block;
 }
-
 
 @keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-8px); 
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+#level-greeting,
+#stage-greeting {
+    font-size: 0.85rem;
+    color: #00FFFF;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 0 #000;
+    letter-spacing: 2px;
+    padding: 14px 24px;
+    border: 3px dashed rgba(0,255,255,0.3);
+    background: rgba(0,20,40,0.5);
+    line-height: 1.9;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
