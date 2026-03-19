@@ -217,3 +217,26 @@ body.pixel-art-body::after {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000;
 }
+
+/* ============================
+   RESPONSIVE DESIGN (屏幕自适应缩放)
+   ============================ */
+
+/* 针对普通笔记本电脑 (Laptop) */
+@media screen and (max-width: 1440px) {
+    html { font-size: 14px; } /* 把基础字体缩小，所有 rem 跟着按比例缩小！ */
+    .pixel-main-content { padding: 0 15px; }
+}
+
+/* 针对小屏幕笔记本 / 平板 (Small Laptop / Tablet) */
+@media screen and (max-width: 1024px) {
+    html { font-size: 12px; } 
+    .pixel-header { padding: 10px 15px; min-height: 60px; }
+}
+
+/* 针对手机 (Mobile) */
+@media screen and (max-width: 768px) {
+    html { font-size: 10px; } 
+    .pixel-header h1 { font-size: 1.2rem; }
+    .header-right { flex-direction: column; gap: 5px; }
+}

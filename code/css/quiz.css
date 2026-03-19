@@ -267,3 +267,9 @@
     transform: translate(3px, 3px);
     box-shadow: 2px 2px 0 #000;
 }
+
+/* 针对小屏幕，取消固定的过大高度和间距 */
+@media screen and (max-width: 1024px) {
+    .quiz-question { min-height: 450px; padding: 20px 25px; }
+    .module-block { padding: 25px; }
+}
