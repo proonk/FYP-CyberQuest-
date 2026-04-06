@@ -174,7 +174,7 @@ function showFinishScreen() {
     modalBox.style.textAlign = 'center';
     modalBox.innerHTML = `
         <h2 style="font-size: 2rem; color: #00FF00; margin-bottom: 20px;">🏆 MISSION COMPLETE! 🏆</h2>
-        <p style="font-size: 1.2rem; color: #FFFFFF;">You have defeated this challenge!</p>
+        <p style="font-size: 1.2rem; color: #FFFFFF;">You have completed this stage!</p>
         
         <button id="back-to-levels-btn" class="welcome-button child-btn" style="margin-top: 30px;">Back to Stages</button>
     `;
