@@ -1,15 +1,9 @@
-/* ============================
-   QUIZ CONTAINER
-   ============================ */
 #quiz-container {
     padding-bottom: 80px;
     max-width: 1000px;
     margin: 0 auto;
 }
 
-/* ============================
-   MODULE INTRO CARD (Stage 1.1 style)
-   ============================ */
 .module-block {
     background-color: #0d0d3a;
     border: 4px solid #00FFFF;
@@ -27,7 +21,6 @@
     border-bottom: 3px solid rgba(255,255,0,0.25);
 }
 
-/* Content text — white, normal weight */
 .module-block p {
     font-size: 0.82rem;
     line-height: 2.4;
@@ -35,7 +28,6 @@
     font-weight: normal;
 }
 
-/* Bold key words with <strong> — all use same cyan color */
 .module-block p strong,
 .module-block strong {
     color: #00FFFF;
@@ -43,7 +35,6 @@
     text-shadow: 1px 1px 0 #000;
 }
 
-/* Images in module content */
 .module-block img {
     display: block;
     max-width: 320px;
@@ -53,9 +44,6 @@
     image-rendering: pixelated;
 }
 
-/* ============================
-   QUESTION CARD
-   ============================ */
 .quiz-question {
     background-color: #0d0d3a;
     border: 4px solid #FF00FF;
@@ -68,7 +56,6 @@
     overflow: hidden;
 }
 
-/* Top pixel accent bar */
 .quiz-question::before {
     content: '';
     position: absolute;
@@ -81,7 +68,6 @@
     );
 }
 
-/* Question text */
 .quiz-question > p {
     font-size: 1.2rem;
     color: #FFFFFF;
@@ -91,7 +77,6 @@
     padding: 0 8px;
 }
 
-/* Progress */
 .quiz-progress {
     color: #AAAAAA;
     font-size: 0.6rem;
@@ -118,9 +103,6 @@
     transition: width 0.4s ease;
 }
 
-/* ============================
-   ANSWER OPTION BUTTONS
-   ============================ */
 .answers-wrapper {
     margin-top: auto;
     width: 100%;
@@ -157,9 +139,6 @@
     box-shadow: 1px 1px 0px #000;
 }
 
-/* ============================
-   FEEDBACK MODAL — bigger, more kid-friendly
-   ============================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -200,7 +179,6 @@
     width: 14px; height: 14px;
 }
 
-/* Success */
 .feedback-modal.success {
     border-color: #00FF00;
     box-shadow: 10px 10px 0px #000, 0 0 50px rgba(0,255,0,0.25);
@@ -216,7 +194,6 @@
     line-height: 1.8;
 }
 
-/* Error */
 .feedback-modal.error {
     border-color: #FF3333;
     box-shadow: 10px 10px 0px #000, 0 0 50px rgba(255,0,0,0.25);
@@ -232,7 +209,6 @@
     line-height: 1.8;
 }
 
-/* Feedback description text — left aligned for clean line breaks */
 .feedback-message {
     color: #FFFFFF;
     font-size: 0.85rem;
@@ -242,7 +218,6 @@
     padding: 0 4px;
 }
 
-/* Next button — full width so it balances the modal */
 #next-question-btn {
     font-family: 'Press Start 2P', cursive;
     font-size: 0.85rem;
@@ -268,7 +243,7 @@
     box-shadow: 2px 2px 0 #000;
 }
 
-/* 针对小屏幕，取消固定的过大高度和间距 */
+
 @media screen and (max-width: 1024px) {
     .quiz-question { min-height: 450px; padding: 20px 25px; }
     .module-block { padding: 25px; }

@@ -29,7 +29,7 @@ let bossHp = 100;
 const DAMAGE_PER_HIT = 20; 
 let hasHackerAttacked = false; 
 
-// 🔥 新增：专业的洗牌算法 (Fisher-Yates Shuffle)
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -62,10 +62,8 @@ async function loadBossData() {
     }
     
     allQuestions = uniqueQuestions; 
-    
-    // 🔥 核心改动 1：游戏开始前，把这 15 道题彻底洗牌打乱！
     shuffleArray(allQuestions);
-    currentQuestionIndex = 0; // 永远从洗好的第一张牌开始抽
+    currentQuestionIndex = 0; 
 
     if (backBtnElement) backBtnElement.href = `stages.html?level_id=${currentModule.level_id}`;
     showIntro();
@@ -85,7 +83,7 @@ function showIntro() {
     document.getElementById('start-boss-btn').onclick = () => {
         introContainer.style.display = 'none';
         arenaContainer.style.display = 'block';
-        showQuestion(); // 直接显示第一张牌的题目
+        showQuestion(); 
     };
 }
 
@@ -175,10 +173,8 @@ function checkGameStatus() {
     } else if (bossHp <= 0) {
         showVictory();
     } else {
-        // 🔥 核心改动 2：不再掷骰子随机抽，而是按洗好的牌堆，往下拿新的一张牌！
         currentQuestionIndex++; 
-        
-        // 防御机制：万一遇到极小概率，玩家把 15 张牌全抽完了还没结束，就再洗一次牌重头开始
+
         if (currentQuestionIndex >= allQuestions.length) {
             shuffleArray(allQuestions);
             currentQuestionIndex = 0;
@@ -188,9 +184,7 @@ function checkGameStatus() {
     }
 }
 
-// ==========================================
-// 🚨 史诗级三连击事件管理器 🚨
-// ==========================================
+
 function startHackerAttackSequence() {
     hasHackerAttacked = true;
     attackOverlay.style.display = 'flex';
@@ -246,7 +240,7 @@ function showAttackStep(stepNumber) {
             bossHpBar.style.width = '0%';
             
             modalBox.className = 'feedback-modal success';
-            modalTitle.textContent = '🛡️ ULTIMATE DEFENSE! 🛡️';
+            modalTitle.textContent = '🛡️ ULTIMATE DEFENCE! 🛡️';
             modalText.textContent = 'You survived the Hacker\'s Ultimate Attack! The reflected damage destroyed him!';
             modalOverlay.style.display = 'flex';
             

@@ -17,7 +17,6 @@ const modalText = document.getElementById('feedback-text');
 const nextBtn = document.getElementById('next-question-btn');
 const backBtnElement = document.getElementById('quiz-back-btn');
 
-// Global Variables
 let currentModule = null;
 let allQuestions = [];
 let currentQuestionIndex = 0;
@@ -32,7 +31,6 @@ async function loadQuizData() {
         return;
     }
 
-    // Fetch Module & Questions
     const { data: module, error } = await supabaseClient
         .from('modules')
         .select(`*, quizzes ( *, explanation )`)
@@ -64,7 +62,6 @@ function showIntro() {
     
     let buttonHtml = '';
     
-    // Check if it's a Quiz or a Tutorial
     if (allQuestions.length > 0) {
         buttonHtml = `
             <button id="start-btn" class="welcome-button child-btn" 
@@ -72,7 +69,6 @@ function showIntro() {
                 ⚔️ START CHALLENGE ⚔️
             </button>`;
     } else {
-        // Tutorial Mode: Simple "DONE" button
         buttonHtml = `
             <button id="tutorial-complete-btn" class="welcome-button child-btn" 
                 style="background-color: #00FFFF; color: #000; font-size: 1.5rem; padding: 20px; box-shadow: 6px 6px 0px #000;">
@@ -87,12 +83,8 @@ function showIntro() {
     `;
 
     quizContainer.appendChild(introCard);
-
-    // Logic for Start Button (Quiz)
     const startBtn = document.getElementById('start-btn');
     if (startBtn) startBtn.onclick = () => showQuestion();
-
-    // Logic for Tutorial Complete Button (No saving progress needed anymore)
     const tutorialBtn = document.getElementById('tutorial-complete-btn');
     if (tutorialBtn) {
         tutorialBtn.onclick = () => {

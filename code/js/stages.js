@@ -1,7 +1,6 @@
 const { createClient } = supabase;
 const SUPABASE_URL = 'https://badvtexbyyohwytmpsjb.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_nHnxonv351nxwOERvHNPgg_4ss7g1C7';
-
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const stagesContainer = document.getElementById('stages-list-container');
 
@@ -28,7 +27,6 @@ async function loadStages() {
 
     stagesContainer.innerHTML = ''; 
 
-// Render all modules as unlocked
     modules.forEach((module, index) => {
         const stageCard = document.createElement('button');
         stageCard.className = 'level-card'; 

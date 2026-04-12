@@ -3,8 +3,7 @@ const ageGroup = localStorage.getItem('ageGroup');
 const greeting = document.getElementById('level-greeting');
 
 if (!userName || ageGroup !== 'child') {
-    // Optional: Redirect if login is enforced
-    // window.location.href = 'index.html';
+  
 }
 
 if (userName && greeting) {
@@ -30,8 +29,6 @@ async function loadLevels() {
     }
 
     levelsContainer.innerHTML = '';
-
-    // Render all levels as unlocked
     levels.forEach((level) => {
         const card = document.createElement('button');
         card.className = 'level-card large'; 
@@ -41,7 +38,6 @@ async function loadLevels() {
             <p>${level.description}</p>
         `;
         
-        // Add click event to all levels
         card.addEventListener('click', () => {
             window.location.href = `stages.html?level_id=${level.id}`;
         });

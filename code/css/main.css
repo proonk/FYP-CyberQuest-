@@ -16,7 +16,7 @@ body.pixel-art-body {
     image-rendering: pixelated;
 }
 
-/* Animated pixel sky background */
+
 body.pixel-art-body::before {
     content: '';
     position: fixed;
@@ -42,7 +42,7 @@ body.pixel-art-body::before {
     z-index: 0;
 }
 
-/* Pixel ground strip */
+
 body.pixel-art-body::after {
     content: '';
     position: fixed;
@@ -56,9 +56,7 @@ body.pixel-art-body::after {
     box-shadow: 0 -2px 0 #6abb6a inset;
 }
 
-/* ============================
-   HEADER
-   ============================ */
+
 .pixel-header {
     display: flex;
     justify-content: space-between;
@@ -110,9 +108,7 @@ body.pixel-art-body::after {
     transform: translate(2px, 2px);
 }
 
-/* ============================
-   MAIN CONTENT
-   ============================ */
+
 .pixel-main-content {
     max-width: 820px;
     margin: 0 auto;
@@ -132,9 +128,7 @@ body.pixel-art-body::after {
     border: 3px dashed #00FFFF44;
 }
 
-/* ============================
-   LOADING
-   ============================ */
+
 .loading-message {
     font-size: 0.85rem;
     color: #FFFF00;
@@ -148,9 +142,7 @@ body.pixel-art-body::after {
     50% { opacity: 0; }
 }
 
-/* ============================
-   BUTTONS (shared)
-   ============================ */
+
 .welcome-button {
     font-family: 'Press Start 2P', cursive;
     font-size: 0.75rem;
@@ -181,9 +173,7 @@ body.pixel-art-body::after {
     box-shadow: 8px 8px 0px #005522;
 }
 
-/* ============================
-   HEADER RIGHT
-   ============================ */
+
 .header-right {
     display: flex;
     gap: 12px;
@@ -218,23 +208,19 @@ body.pixel-art-body::after {
     box-shadow: 2px 2px 0px #000;
 }
 
-/* ============================
-   RESPONSIVE DESIGN (屏幕自适应缩放)
-   ============================ */
 
-/* 针对普通笔记本电脑 (Laptop) */
 @media screen and (max-width: 1440px) {
-    html { font-size: 14px; } /* 把基础字体缩小，所有 rem 跟着按比例缩小！ */
+    html { font-size: 14px; } 
     .pixel-main-content { padding: 0 15px; }
 }
 
-/* 针对小屏幕笔记本 / 平板 (Small Laptop / Tablet) */
+
 @media screen and (max-width: 1024px) {
     html { font-size: 12px; } 
     .pixel-header { padding: 10px 15px; min-height: 60px; }
 }
 
-/* 针对手机 (Mobile) */
+
 @media screen and (max-width: 768px) {
     html { font-size: 10px; } 
     .pixel-header h1 { font-size: 1.2rem; }
