@@ -228,6 +228,7 @@ body.pixel-art-body::after {
         margin-bottom: 10px !important;
         flex: 1;
         display: flex;
+        flex-direction: column !important; 
         align-items: center;
         justify-content: center;
         width: 100%;
@@ -241,7 +242,8 @@ body.pixel-art-body::after {
         padding: 20px 30px !important; 
         min-height: auto !important;  
         max-height: calc(100vh - 160px) !important; 
-        overflow-y: auto;              
+        overflow-y: auto;
+        width: 100% !important; 
     }
 
     .option-button {
@@ -250,7 +252,6 @@ body.pixel-art-body::after {
         font-size: 1rem !important;
     }
 
-    body.pixel art body::after,
     body.pixel-art-body::after {
         height: 28px !important;
         background: linear-gradient(180deg, #4a9e4a 0px, #4a9e4a 6px, #3d7a3d 6px, #3d7a3d 18px, #2a5a2a 18px, #2a5a2a 28px) !important;

@@ -286,10 +286,13 @@
         overflow: hidden !important;
     }
 
-    .welcome-container {
+    .welcome-portal {
         padding: 30px 40px !important;
-        margin-top: -20px !important; 
         max-width: 500px !important;
+    }
+
+    .welcome-main {
+        margin-top: -20px !important;
     }
 
     .pixel-title {
