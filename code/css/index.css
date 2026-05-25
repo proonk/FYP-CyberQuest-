@@ -278,31 +278,10 @@
 }
 
 
-/*laptop size*/
-@media screen and (max-height: 850px), screen and (max-width: 1366px) {
-    body.welcome-body {
-        height: 100vh !important;
-        min-height: 100vh !important;
-        overflow: hidden !important;
-    }
-
-    .welcome-portal {
-        padding: 30px 40px !important;
-        max-width: 500px !important;
-    }
-
-    .welcome-main {
-        margin-top: -20px !important;
-    }
-
-    .pixel-title {
-        font-size: 2.5rem !important;
-        margin-bottom: 20px !important;
-    }
-
+@media screen and (max-height: 800px), screen and (max-width: 1024px) {
     .welcome-body::after {
-        height: 28px !important;
-        background: repeating-linear-gradient(90deg, #3d7a3d 0px, #3d7a3d 14px, #2d5a2d 14px, #2d5a2d 28px) !important;
-        box-shadow: 0 -3px 0 #5aaa5a inset !important;
+        height: 24px;
+        background: repeating-linear-gradient(90deg, #3d7a3d 0px, #3d7a3d 12px, #2d5a2d 12px, #2d5a2d 24px);
+        box-shadow: 0 -2px 0 #5aaa5a inset;
     }
 }

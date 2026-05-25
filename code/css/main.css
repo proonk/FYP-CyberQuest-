@@ -208,53 +208,34 @@ body.pixel-art-body::after {
     box-shadow: 2px 2px 0px #000;
 }
 
-/*laptop size*/
-@media screen and (max-height: 850px), screen and (max-width: 1366px) {
-    html {
-        font-size: 13px !important;
-    }
 
+@media screen and (max-width: 1440px) {
+    html { font-size: 14px; } 
+    .pixel-main-content { padding: 0 15px; }
+}
+
+
+@media screen and (max-width: 1024px) {
+    html { font-size: 12px; } 
+    .pixel-header { padding: 10px 15px; min-height: 60px; }
+}
+
+
+@media screen and (max-width: 768px) {
+    html { font-size: 10px; } 
+    .pixel-header h1 { font-size: 1.2rem; }
+    .header-right { flex-direction: column; gap: 5px; }
+}
+
+
+@media screen and (max-height: 800px), screen and (max-width: 1024px) {
     body.pixel-art-body {
-        min-height: 100vh !important;
-        height: 100vh !important;
-        padding-bottom: 40px !important; 
-        overflow: hidden !important;     
-        display: flex;
-        flex-direction: column;
+        padding-bottom: 30px; 
     }
-
-    .pixel-main-content {
-        margin-top: 15px !important;
-        margin-bottom: 10px !important;
-        flex: 1;
-        display: flex;
-        flex-direction: column !important; 
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 1200px;
-    }
-
-    .stages-container, 
-    .quiz-question, 
-    .module-block,
-    #boss-arena-container {
-        padding: 20px 30px !important; 
-        min-height: auto !important;  
-        max-height: calc(100vh - 160px) !important; 
-        overflow-y: auto;
-        width: 100% !important; 
-    }
-
-    .option-button {
-        padding: 12px 20px !important;
-        margin: 8px 0 !important;
-        font-size: 1rem !important;
-    }
-
+    
     body.pixel-art-body::after {
-        height: 28px !important;
-        background: linear-gradient(180deg, #4a9e4a 0px, #4a9e4a 6px, #3d7a3d 6px, #3d7a3d 18px, #2a5a2a 18px, #2a5a2a 28px) !important;
-        box-shadow: 0 -3px 0 #6abb6a inset !important;
+        height: 20px; 
+        background: linear-gradient(180deg, #4a9e4a 0px, #4a9e4a 4px, #3d7a3d 4px, #3d7a3d 14px, #2a5a2a 14px, #2a5a2a 20px);
+        box-shadow: 0 -2px 0 #6abb6a inset;
     }
 }

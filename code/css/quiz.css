@@ -1,5 +1,5 @@
 #quiz-container {
-    padding-bottom: 20px;
+    padding-bottom: 80px;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -241,4 +241,10 @@
 #next-question-btn:active {
     transform: translate(3px, 3px);
     box-shadow: 2px 2px 0 #000;
+}
+
+
+@media screen and (max-width: 1024px) {
+    .quiz-question { min-height: 450px; padding: 20px 25px; }
+    .module-block { padding: 25px; }
 }
