@@ -226,3 +226,16 @@ body.pixel-art-body::after {
     .pixel-header h1 { font-size: 1.2rem; }
     .header-right { flex-direction: column; gap: 5px; }
 }
+
+
+@media screen and (max-height: 800px), screen and (max-width: 1024px) {
+    body.pixel-art-body {
+        padding-bottom: 30px; 
+    }
+    
+    body.pixel-art-body::after {
+        height: 20px; 
+        background: linear-gradient(180deg, #4a9e4a 0px, #4a9e4a 4px, #3d7a3d 4px, #3d7a3d 14px, #2a5a2a 14px, #2a5a2a 20px);
+        box-shadow: 0 -2px 0 #6abb6a inset;
+    }
+}

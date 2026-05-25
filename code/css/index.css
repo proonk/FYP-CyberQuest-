@@ -276,3 +276,12 @@
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-3px); }
 }
+
+
+@media screen and (max-height: 800px), screen and (max-width: 1024px) {
+    .welcome-body::after {
+        height: 24px;
+        background: repeating-linear-gradient(90deg, #3d7a3d 0px, #3d7a3d 12px, #2d5a2d 12px, #2d5a2d 24px);
+        box-shadow: 0 -2px 0 #5aaa5a inset;
+    }
+}
